@@ -142,17 +142,14 @@ a.act:active {
   color: #141414;
 }
 
-button.solid,
-.add-form button[type="submit"] {
+button.solid {
   background: #c2410c;
   border-color: #c2410c;
   color: #fff;
 }
 
 button.solid:hover,
-button.solid:active,
-.add-form button[type="submit"]:hover,
-.add-form button[type="submit"]:active {
+button.solid:active {
   background: #b54708;
   border-color: #b54708;
   color: #fff;

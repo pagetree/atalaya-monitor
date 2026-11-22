@@ -8,9 +8,14 @@ $onAccount = true;
 
 $tabs = [
     'profile' => 'Profile',
-    'alerts' => 'Alerts',
-    'logs' => 'Logs',
+    'notifications' => 'Notifications',
+    'support' => 'Support',
 ];
+
+$tab = (string) ($_GET['tab'] ?? 'profile');
+if (!isset($tabs[$tab])) {
+    $tab = 'profile';
+}
 
 $draft = null;
 if (isset($_SESSION['profile_draft']) && is_array($_SESSION['profile_draft'])) {
@@ -23,13 +28,22 @@ $notice = auth_flash_get('notice');
 
 $icons = [
     'profile' => '<circle cx="8" cy="5.4" r="2.2"/><path d="M3.4 13.2c.7-2.3 2.4-3.4 4.6-3.4s3.9 1.1 4.6 3.4"/>',
-    'alerts' => '<path d="M8 2.2a3.6 3.6 0 0 1 3.6 3.6v2.2l1.2 2H3.2l1.2-2V5.8A3.6 3.6 0 0 1 8 2.2z"/><path d="M6.6 12.2a1.5 1.5 0 0 0 2.8 0"/>',
-    'logs' => '<path d="M4 2.5h6.2L13 5.3V13.5H4z"/><path d="M10 2.5V5.5h3M6 8h4M6 10.5h4"/>',
+    'notifications' => '<path d="M8 2.2a3.6 3.6 0 0 1 3.6 3.6v2.2l1.2 2H3.2l1.2-2V5.8A3.6 3.6 0 0 1 8 2.2z"/><path d="M6.6 12.2a1.5 1.5 0 0 0 2.8 0"/>',
+    'support' => '<circle cx="8" cy="8" r="5.2"/><circle cx="8" cy="8" r="2"/><path d="M4.2 4.2l2.2 2.2M11.8 4.2l-2.2 2.2M4.2 11.8l2.2-2.2M11.8 11.8l-2.2-2.2"/>',
 ];
 $hrefs = [
     'profile' => 'settings.php?tab=profile',
-    'alerts' => 'index.php#alerts',
-    'logs' => 'index.php#log',
+    'notifications' => 'settings.php?tab=notifications',
+    'support' => 'settings.php?tab=support',
+];
+$ledes = [
+    'profile' => 'Your account details.',
+    'notifications' => 'How we reach you.',
+    'support' => 'Help with your account.',
+];
+$placeholders = [
+    'notifications' => 'Notification preferences will live on this page.',
+    'support' => 'Ways to reach support will live on this page.',
 ];
 
 $headNav = [];
@@ -38,13 +52,13 @@ foreach ($tabs as $key => $label) {
         'href' => $hrefs[$key],
         'label' => $label,
         'icon' => $icons[$key],
-        'current' => $key === 'profile',
+        'current' => $key === $tab,
     ];
 }
 
 $headTitle = 'Settings';
-$headLede = 'Your profile, the alert list, and the check log.';
-$pageTitle = 'Settings · atalaya';
+$headLede = $ledes[$tab];
+$pageTitle = $tabs[$tab] . ' · atalaya';
 
 require __DIR__ . '/includes/head.php';
 ?>
@@ -60,10 +74,14 @@ require __DIR__ . '/includes/head.php';
     <p class="banner ok" role="status"><?= htmlspecialchars($notice, ENT_QUOTES, 'UTF-8') ?></p>
   <?php endif; ?>
 
-  <?php if (empty($appProfile['storage'])): ?>
-    <div class="sheet-card"><div class="sheet-block"><p>The form opens once the name fields exist on the account.</p></div></div>
+  <?php if ($tab === 'profile'): ?>
+    <?php if (empty($appProfile['storage'])): ?>
+      <div class="sheet-card"><div class="sheet-block"><p>The form opens once the name fields exist on the account.</p></div></div>
+    <?php else: ?>
+      <?php require __DIR__ . '/includes/view-profile.php'; ?>
+    <?php endif; ?>
   <?php else: ?>
-    <?php require __DIR__ . '/includes/view-profile.php'; ?>
+    <div class="sheet-card"><div class="sheet-block"><p><?= htmlspecialchars($placeholders[$tab], ENT_QUOTES, 'UTF-8') ?></p></div></div>
   <?php endif; ?>
 </main>
 </body>

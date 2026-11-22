@@ -40,6 +40,10 @@
     max-width: none;
   }
 
+  .kpis {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .columns {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -109,14 +113,8 @@
     width: 44px;
   }
 
-  .drawer {
-    width: 100%;
-  }
-
-  .drawer-head,
-  .add-form {
-    padding-left: 24px;
-    padding-right: 24px;
+  .add-pair {
+    grid-template-columns: 1fr;
   }
 
   .every-grid {

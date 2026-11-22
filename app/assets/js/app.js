@@ -9,28 +9,6 @@ function closeClear() {
   if (state.returnFocus && state.returnFocus.focus) state.returnFocus.focus();
 }
 
-export function setAddOpen(open) {
-  var panel = $('add');
-  var scrim = $('add-scrim');
-  var already = panel.classList.contains('is-open');
-  if (open === already) return;
-  panel.classList.toggle('is-open', open);
-  scrim.classList.toggle('is-open', open);
-  panel.setAttribute('aria-hidden', open ? 'false' : 'true');
-  document.body.classList.toggle('add-open', open);
-  if (open) {
-    panel.removeAttribute('inert');
-    state.addReturn = document.activeElement;
-    window.setTimeout(function () {
-      if (els.form && els.form.name) els.form.name.focus();
-    }, 30);
-    return;
-  }
-  panel.setAttribute('inert', '');
-  if (state.addReturn && state.addReturn.focus) state.addReturn.focus();
-  state.addReturn = null;
-}
-
 function onClick(event) {
   var btn = event.target.closest('[data-action]');
   if (!btn || btn.tagName === 'SELECT') return;
@@ -123,12 +101,6 @@ function onClick(event) {
     return;
   }
 
-  if (action === 'close-add') {
-    if (location.hash === '#add') location.hash = 'monitors';
-    else setAddOpen(false);
-    return;
-  }
-
   if (action === 'clear-ask') {
     state.returnFocus = document.activeElement;
     els.clearAsk.hidden = false;
@@ -192,12 +164,12 @@ function syncView() {
   var known = hash === 'main' || hash === 'monitors' || hash === 'log' || hash === 'settings' || hash === 'alerts' || hash === 'add' || hash === 'status';
   var page = known ? hash : 'main';
   $('view-main').hidden = page !== 'main';
-  $('view-monitors').hidden = page !== 'monitors' && page !== 'add';
+  $('view-monitors').hidden = page !== 'monitors';
+  $('view-add').hidden = page !== 'add';
   $('view-log').hidden = page !== 'log';
   $('view-settings').hidden = page !== 'settings';
   $('view-alerts').hidden = page !== 'alerts';
   $('view-status').hidden = page !== 'status';
-  setAddOpen(page === 'add');
   var titles = {
     main: ['Main', 'The state of the services you watch.'],
     monitors: ['Monitors', 'Addresses you are watching.'],
@@ -246,11 +218,6 @@ export function init() {
   document.addEventListener('click', onClick);
   document.addEventListener('keydown', function (event) {
     if (event.key !== 'Escape') return;
-    if ($('add').classList.contains('is-open')) {
-      if (location.hash === '#add') location.hash = 'monitors';
-      else setAddOpen(false);
-      return;
-    }
     if (!els.clearAsk.hidden) {
       closeClear();
       return;
@@ -280,8 +247,12 @@ export function init() {
     }
   });
 
-  window.addEventListener('hashchange', syncView);
+  window.addEventListener('hashchange', function () {
+    syncView();
+    if (location.hash === '#add' && els.form && els.form.name) els.form.name.focus();
+  });
   syncView();
+  if (location.hash === '#add' && els.form && els.form.name) els.form.name.focus();
   render();
   tick();
   setInterval(tick, 5000);
