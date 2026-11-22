@@ -31,7 +31,7 @@ try {
 
     auth_mark_email_verified($pending['id']);
     auth_login_user($pending['id'], $pending['email']);
-    auth_redirect('/app/');
+    auth_redirect('/app/settings.php?tab=profile');
 } catch (Throwable $e) {
     auth_flash_set('error', 'Could not verify the code. Try again.');
     auth_redirect('/auth/verify.php');

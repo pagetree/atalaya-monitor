@@ -1,4 +1,12 @@
-<?php require __DIR__ . '/includes/head.php'; ?>
+<?php
+
+require __DIR__ . '/includes/guard.php';
+[$appUser, $appProfile] = app_boot();
+app_require_profile($appProfile);
+$pageTitle = 'Monitors · atalaya';
+
+require __DIR__ . '/includes/head.php';
+?>
 <?php require __DIR__ . '/includes/topbar.php'; ?>
 
     <main id="content" tabindex="-1">

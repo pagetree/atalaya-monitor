@@ -1,5 +1,5 @@
 @media (max-width: 860px) {
-  .top,
+  .dash-brand,
   .hero,
   .section-head,
   .filter-row {
@@ -8,15 +8,14 @@
     gap: 12px;
   }
 
-  nav {
-    flex-wrap: wrap;
-    gap: 4px 0;
+  header.dash,
+  main {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
-  nav a {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
+  .page-nav a {
+    white-space: normal;
   }
 
   .headline {

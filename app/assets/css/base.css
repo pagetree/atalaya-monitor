@@ -79,19 +79,24 @@ a:visited {
 
 
 .banner {
-  margin: 8px 0 0;
-  padding: 8px 12px;
+  margin: 18px 0 0;
+  padding: 10px 12px;
   background: #fdecec;
   color: #9b1b1b;
   border: 1px solid #9b1b1b;
+}
+
+.banner.ok {
+  background: #eef8ee;
+  color: #0b5d24;
+  border-color: #0b5d24;
 }
 
 main {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding-top: 12px;
-  padding-bottom: 40px;
+  padding: 12px 24px 48px;
 }
 
 input,

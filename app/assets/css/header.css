@@ -1,15 +1,38 @@
-header {
-  padding: 28px 0 8px;
-}
-
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px 32px;
+header.dash {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+  padding: 28px 24px 0;
+}
+
+.dash-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+
+.account-links {
+  display: flex;
+  align-items: center;
+  gap: 4px 18px;
+}
+
+.account-links a,
+.account-links a:visited {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #141414;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.account-links a:hover,
+.account-links a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .brand {
@@ -62,42 +85,53 @@ header {
   transform: translateX(0);
 }
 
-h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 800;
+.page-head h1 {
+  margin: 22px 0 0;
+  font-size: clamp(1.5rem, 2.4vw, 1.85rem);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 1.15;
 }
 
-.brand h1 {
+.page-lede {
+  margin: 6px 0 0;
+  max-width: 40rem;
+  color: #3d3d3d;
+  font-size: 1.05rem;
+}
+
+.page-nav {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 2px 6px;
+  margin-top: 16px;
+  border-bottom: 1px solid #d9d9d9;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-nav a {
+.page-nav a,
+.page-nav a:visited {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: #141414;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  padding: 10px 4px;
-  font-size: 1rem;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px 10px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: #3d3d3d;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-nav a:visited {
+.page-nav a:hover {
   color: #141414;
 }
 
-nav a[aria-current="page"] {
-  font-weight: 800;
+.page-nav a[aria-current="page"] {
+  color: #141414;
+  font-weight: 700;
+  border-bottom-color: #141414;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -107,6 +141,36 @@ nav a[aria-current="page"] {
   }
 }
 
-.pipe {
-  color: #141414;
-  padding: 0 14px;
+.panel {
+  max-width: 38rem;
+  margin-top: 22px;
+}
+
+.panel p {
+  margin: 0 0 12px;
+}
+
+.panel a.act {
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 1rem;
+}
+
+.lock {
+  margin: 18px 0 0;
+  max-width: 40rem;
+}
+
+.profile-form {
+  display: grid;
+  gap: 16px;
+  max-width: 28rem;
+  margin-top: 8px;
+}
+
+.profile-form button {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 1rem;
+}

@@ -195,7 +195,20 @@ function syncView() {
   $('view-settings').hidden = view !== 'settings';
   $('view-alerts').hidden = view !== 'alerts';
   setAddOpen(page === 'add');
-  var links = document.querySelectorAll('nav a');
+  var titles = {
+    monitors: ['Monitors', 'Addresses you are watching from this browser.'],
+    add: ['Add a monitor', 'Paste an http or https address. The check runs in this browser.'],
+    alerts: ['Alerts', 'Notices from the checks stored in this browser.'],
+    log: ['Log', 'Every check stored in this browser.'],
+    settings: ['Saved data', 'Monitors and the log stored in this browser.']
+  };
+  var copy = titles[page] || titles.monitors;
+  var titleEl = $('dash-title');
+  var ledeEl = $('dash-title-lede');
+  if (titleEl) titleEl.textContent = copy[0];
+  if (ledeEl) ledeEl.textContent = copy[1];
+  document.title = copy[0] + ' · atalaya';
+  var links = document.querySelectorAll('.page-nav a');
   var i;
   for (i = 0; i < links.length; i += 1) {
     if (links[i].getAttribute('href') === '#' + page) links[i].setAttribute('aria-current', 'page');
