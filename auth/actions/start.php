@@ -9,15 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $email = trim((string) ($_POST['email'] ?? ''));
-$password = (string) ($_POST['password'] ?? '');
 
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     auth_flash_set('error', 'Enter a valid email address.');
-    auth_redirect('/auth/');
-}
-
-if (strlen($password) < 8) {
-    auth_flash_set('error', 'Password must be at least 8 characters.');
     auth_redirect('/auth/');
 }
 
@@ -25,12 +19,7 @@ try {
     $user = auth_find_user_by_email($email);
 
     if ($user === null) {
-        $user = auth_create_user($email, $password);
-    } else {
-        if (!auth_verify_password($user, $password)) {
-            auth_flash_set('error', 'Email or password is wrong.');
-            auth_redirect('/auth/');
-        }
+        $user = auth_create_user($email);
     }
 
     $code = auth_create_login_code((string) $user['id']);

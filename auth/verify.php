@@ -11,7 +11,7 @@ if ($user !== null) {
 
 $pending = auth_get_pending_user();
 if ($pending === null) {
-    auth_flash_set('error', 'Start with your email and password first.');
+    auth_flash_set('error', 'Start with your email first.');
     auth_redirect('/auth/');
 }
 
