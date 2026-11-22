@@ -3,6 +3,12 @@ import { $, clock, esc, isQueued, parseUrl, stamp } from './util.js';
 import { GLOBE, ico } from './icons.js';
 import { sampleTone, toneWord, uptimeText } from './samples.js';
 
+function kindLabel(kind) {
+  if (kind === 'api') return 'API';
+  if (kind === 'keyword') return 'Keyword';
+  return 'Website';
+}
+
 function detailText(item) {
   if (!item) return '';
   var bits = [];
@@ -105,7 +111,7 @@ export function renderRows() {
       } else {
         html += '<td class="name" data-label="Name"><span class="name-wrap">' + GLOBE + esc(m.name) + '</span></td>';
       }
-      html += '<td data-label="Type">HTTP</td>';
+      html += '<td data-label="Type">' + kindLabel(m.kind) + '</td>';
       html += '<td class="target" data-label="Target">' + esc(m.url) + '</td>';
       html += '<td data-label="Status"><span class="pill pill-' + pill.tone + '"><span class="dot" aria-hidden="true"></span>' + pill.word + '</span></td>';
       var uptime = uptimeText(m);

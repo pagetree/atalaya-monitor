@@ -53,6 +53,29 @@ export function cleanPeriod(n) {
   return 24;
 }
 
+export function cleanKind(value) {
+  if (value === 'api' || value === 'keyword' || value === 'website') return value;
+  return 'website';
+}
+
+export function cleanSlow(n) {
+  n = Number(n);
+  if (n === 1000 || n === 2000 || n === 5000) return n;
+  return 2000;
+}
+
+export function cleanRegions(list) {
+  var places = { frankfurt: 1, capetown: 1, singapore: 1, sydney: 1 };
+  var out = [];
+  var i;
+  if (!Array.isArray(list)) return ['frankfurt', 'capetown', 'singapore', 'sydney'];
+  for (i = 0; i < list.length; i += 1) {
+    if (places[list[i]] && out.indexOf(list[i]) === -1) out.push(list[i]);
+  }
+  if (!out.length) return ['frankfurt', 'capetown', 'singapore', 'sydney'];
+  return out;
+}
+
 export function isQueued(id) {
   return inflight.has(id) || queue.indexOf(id) !== -1;
 }

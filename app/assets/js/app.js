@@ -1,5 +1,5 @@
 import { KEY, els, state } from './state.js';
-import { $, cleanInterval, cleanPeriod, hostFrom, parseUrl, uid } from './util.js';
+import { $, cleanInterval, cleanKind, cleanPeriod, cleanSlow, hostFrom, parseUrl, uid } from './util.js';
 import { load, save, setBanner, setFormError } from './storage.js';
 import { render, renderRows } from './render.js';
 import { enqueue, findMonitor, tick } from './checks.js';
@@ -150,12 +150,23 @@ function onAdd(event) {
   var regions = [];
   var r;
   for (r = 0; r < regionBoxes.length; r += 1) regions.push(regionBoxes[r].value);
+  var kind = cleanKind(form.kind.value);
+  var phrase = form.phrase ? form.phrase.value.trim().slice(0, 120) : '';
+  if (kind === 'keyword' && !phrase) {
+    setFormError('Type the phrase this page must contain.');
+    if (form.phrase) form.phrase.focus();
+    return;
+  }
   var name = form.name.value.trim().slice(0, 80);
   var interval = cleanInterval(Number(form.interval.value));
+  var slowMs = cleanSlow(Number(form.slow.value));
   state.monitors.push({
     id: uid(),
     name: name || hostFrom(url),
     url: url,
+    kind: kind,
+    phrase: kind === 'keyword' ? phrase : '',
+    slowMs: slowMs,
     interval: interval,
     regions: regions,
     notify: notifyBox.value,
@@ -167,6 +178,7 @@ function onAdd(event) {
   setFormError('');
   form.name.value = '';
   form.url.value = '';
+  if (form.phrase) form.phrase.value = '';
   save();
   render();
   enqueue(state.monitors[state.monitors.length - 1].id);
@@ -188,7 +200,7 @@ function syncView() {
   var titles = {
     main: ['Main', 'The state of the services you watch.'],
     monitors: ['Monitors', 'Addresses you are watching.'],
-    add: ['Add a monitor', 'Paste an http or https address.'],
+    add: ['Add a monitor', 'Set the address, the type, and how often we look.'],
     alerts: ['Alerts', 'Notices from your checks.'],
     log: ['Logs', 'Every check on the board.'],
     status: ['Public Status Page', 'What visitors see about these services.'],
@@ -245,7 +257,18 @@ export function init() {
     if (again) again.focus();
   });
 
+  function syncKindFields() {
+    var picked = els.form.querySelector('input[name="kind"]:checked');
+    var field = $('phrase-field');
+    if (!field) return;
+    field.hidden = !(picked && picked.value === 'keyword');
+  }
+
+  els.form.addEventListener('change', function (event) {
+    if (event.target && event.target.name === 'kind') syncKindFields();
+  });
   els.form.addEventListener('submit', onAdd);
+  syncKindFields();
   els.rows.addEventListener('change', function (event) {
     var sel = event.target;
     if (!sel || sel.getAttribute('data-action') !== 'interval') return;
@@ -264,10 +287,10 @@ export function init() {
 
   window.addEventListener('hashchange', function () {
     syncView();
-    if (location.hash === '#add' && els.form && els.form.name) els.form.name.focus();
+    if (location.hash === '#add' && els.form && els.form.url) els.form.url.focus();
   });
   syncView();
-  if (location.hash === '#add' && els.form && els.form.name) els.form.name.focus();
+  if (location.hash === '#add' && els.form && els.form.url) els.form.url.focus();
   render();
   tick();
   setInterval(tick, 5000);

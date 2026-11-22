@@ -28,7 +28,7 @@ function runCheck(id) {
   }
   inflight.add(id);
   render();
-  probe(monitor.url).then(function (result) {
+  probe(monitor).then(function (result) {
     finishCheck(id, result);
   }, function () {
     finishCheck(id, { state: 'down', code: null, ms: null, note: 'no response' });
@@ -43,12 +43,14 @@ function finishCheck(id, result) {
     if (state.monitors[i].id === id) current = state.monitors[i];
   }
   if (current) {
+    var slowMs = current.slowMs == null ? 2000 : current.slowMs;
     current.last = {
       at: Date.now(),
       state: result.state,
       code: result.code,
       ms: result.ms,
-      note: result.note || ''
+      note: result.note || '',
+      slowMs: slowMs
     };
     state.log.unshift({
       at: current.last.at,
@@ -57,11 +59,12 @@ function finishCheck(id, result) {
       state: result.state,
       code: result.code,
       ms: result.ms,
-      note: result.note || ''
+      note: result.note || '',
+      slowMs: slowMs
     });
     if (state.log.length > 200) state.log.length = 200;
     current.samples = current.samples || [];
-    current.samples.push({ at: current.last.at, state: current.last.state, ms: current.last.ms });
+    current.samples.push({ at: current.last.at, state: current.last.state, ms: current.last.ms, slowMs: slowMs });
     current.samples = normalizeSamples(current.samples);
     save();
   }
@@ -89,22 +92,60 @@ function attempt(url, mode) {
   });
 }
 
-function probe(url) {
-  return attempt(url, 'cors').then(function (cors) {
-    if (cors.kind === 'response') {
-      return {
-        state: cors.response.ok ? 'up' : 'down',
-        code: cors.response.status,
-        ms: cors.ms,
-        note: ''
-      };
+function looksLikeApi(type) {
+  type = String(type || '').toLowerCase();
+  if (!type) return true;
+  if (type.indexOf('json') !== -1) return true;
+  if (type.indexOf('xml') !== -1) return true;
+  if (type.indexOf('text/plain') !== -1) return true;
+  if (type.indexOf('text/csv') !== -1) return true;
+  if (type.indexOf('grpc') !== -1) return true;
+  if (type.indexOf('octet-stream') !== -1) return true;
+  return false;
+}
+
+function readBody(monitor, cors) {
+  var response = cors.response;
+  var base = {
+    state: response.ok ? 'up' : 'down',
+    code: response.status,
+    ms: cors.ms,
+    note: ''
+  };
+  if (!response.ok) return base;
+  if (monitor.kind === 'api') {
+    if (!looksLikeApi(response.headers.get('content-type'))) {
+      base.state = 'answered';
+      base.note = 'html page';
     }
+    return base;
+  }
+  if (monitor.kind === 'keyword') {
+    return response.text().then(function (body) {
+      var hay = String(body || '').slice(0, 500000).toLowerCase();
+      var needle = String(monitor.phrase || '').toLowerCase();
+      if (!needle || hay.indexOf(needle) === -1) {
+        return { state: 'down', code: response.status, ms: cors.ms, note: 'phrase missing' };
+      }
+      return { state: 'up', code: response.status, ms: cors.ms, note: '' };
+    }, function () {
+      return { state: 'answered', code: response.status, ms: cors.ms, note: 'body unread' };
+    });
+  }
+  return base;
+}
+
+function probe(monitor) {
+  var url = monitor.url;
+  return attempt(url, 'cors').then(function (cors) {
+    if (cors.kind === 'response') return readBody(monitor, cors);
     if (cors.kind === 'timeout') {
       return { state: 'down', code: null, ms: null, note: 'timed out' };
     }
     return attempt(url, 'no-cors').then(function (opaque) {
       if (opaque.kind === 'response') {
-        return { state: 'answered', code: null, ms: opaque.ms, note: 'status hidden' };
+        var note = monitor.kind === 'keyword' ? 'body hidden' : 'status hidden';
+        return { state: 'answered', code: null, ms: opaque.ms, note: note };
       }
       if (opaque.kind === 'timeout') {
         return { state: 'down', code: null, ms: null, note: 'timed out' };

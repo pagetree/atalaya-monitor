@@ -1,5 +1,5 @@
 import { INTERVALS, STATES, state } from './state.js';
-import { cleanInterval, cleanPeriod, hostFrom, parseUrl } from './util.js';
+import { cleanInterval, cleanKind, cleanPeriod, cleanRegions, cleanSlow, hostFrom, parseUrl } from './util.js';
 
 export function normalizeSamples(list) {
   if (!Array.isArray(list)) return [];
@@ -16,7 +16,9 @@ export function normalizeSamples(list) {
     if (seen[key]) continue;
     seen[key] = 1;
     var ms = sample.ms == null ? null : Number(sample.ms);
-    out.push({ at: at, state: sample.state, ms: isFinite(ms) ? ms : null });
+    var slowMs = sample.slowMs == null ? null : cleanSlow(sample.slowMs);
+    if (sample.slowMs == null) slowMs = null;
+    out.push({ at: at, state: sample.state, ms: isFinite(ms) ? ms : null, slowMs: slowMs });
   }
   out.sort(function (a, b) { return a.at - b.at; });
   if (out.length > 8000) out = out.slice(out.length - 8000);
@@ -41,7 +43,8 @@ export function sampleTone(item) {
   if (!item) return 'empty';
   if (item.state === 'down') return 'down';
   if (item.state === 'answered') return 'slow';
-  if (item.state === 'up' && item.ms != null && item.ms >= 2000) return 'slow';
+  var limit = item.slowMs == null ? 2000 : cleanSlow(item.slowMs);
+  if (item.state === 'up' && item.ms != null && item.ms >= limit) return 'slow';
   if (item.state === 'up') return 'up';
   return 'empty';
 }
@@ -178,7 +181,8 @@ export function normalizeLast(last) {
     state: last.state,
     code: isFinite(code) ? code : null,
     ms: isFinite(ms) ? ms : null,
-    note: typeof last.note === 'string' ? last.note.slice(0, 80) : ''
+    note: typeof last.note === 'string' ? last.note.slice(0, 80) : '',
+    slowMs: last.slowMs == null ? null : cleanSlow(last.slowMs)
   };
 }
 
@@ -186,11 +190,19 @@ export function normalizeMonitor(m) {
   var url = parseUrl(m && m.url);
   if (!m || typeof m.id !== 'string' || !m.id || !url) return null;
   var name = typeof m.name === 'string' ? m.name.trim().slice(0, 80) : '';
+  var kind = cleanKind(m.kind);
+  var phrase = typeof m.phrase === 'string' ? m.phrase.trim().slice(0, 120) : '';
+  if (kind !== 'keyword') phrase = '';
   return {
     id: m.id,
     name: name || hostFrom(url),
     url: url,
+    kind: kind,
+    phrase: phrase,
+    slowMs: cleanSlow(m.slowMs),
     interval: cleanInterval(Number(m.interval)),
+    regions: cleanRegions(m.regions),
+    notify: m.notify === 'email' ? 'email' : 'email',
     paused: Boolean(m.paused),
     last: normalizeLast(m.last),
     samples: normalizeSamples(m.samples)
@@ -213,7 +225,8 @@ export function normalizeLog(entry) {
     state: entry.state,
     code: isFinite(code) ? code : null,
     ms: isFinite(ms) ? ms : null,
-    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : ''
+    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : '',
+    slowMs: entry.slowMs == null ? null : cleanSlow(entry.slowMs)
   };
 }
 
