@@ -1,0 +1,19 @@
+name = "atalaya-observer"
+main = "src/index.js"
+compatibility_date = "2026-11-22"
+compatibility_flags = ["nodejs_compat"]
+
+# Once a minute. The worker runs again 30 seconds later inside the same invocation.
+[triggers]
+crons = ["* * * * *"]
+
+# Hyperdrive config atalaya-db. Secret PROBE_TOKEN matches the regional workers.
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "0efd9da35e77402490240189eea41c2d"
+
+[vars]
+FRANKFURT_URL = "https://atalaya-frankfurt.sebastian-czinna.workers.dev"
+CAPETOWN_URL = "https://atalaya-capetown.sebastian-czinna.workers.dev"
+SINGAPORE_URL = "https://atalaya-singapore.sebastian-czinna.workers.dev"
+SYDNEY_URL = "https://atalaya-sydney.sebastian-czinna.workers.dev"

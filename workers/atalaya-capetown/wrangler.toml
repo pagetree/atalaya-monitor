@@ -1,0 +1,11 @@
+# Secret, same value as the observer: npx wrangler secret put PROBE_TOKEN
+name = "atalaya-capetown"
+main = "src/index.js"
+compatibility_date = "2026-11-22"
+
+# Incoming /check requests run nearest to Cape Town.
+[placement]
+region = "aws:af-south-1"
+
+[vars]
+REGION = "capetown"
