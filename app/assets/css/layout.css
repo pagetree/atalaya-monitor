@@ -1,6 +1,5 @@
 @media (max-width: 860px) {
   .dash-brand,
-  .hero,
   .section-head,
   .filter-row {
     flex-direction: column;
@@ -18,12 +17,13 @@
     white-space: normal;
   }
 
-  .headline {
-    font-size: 1.8rem;
+  .status-list li {
+    grid-template-columns: 1fr auto;
   }
 
-  .status-card {
-    min-width: 0;
+  .status-meta {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .filter-row input,

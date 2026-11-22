@@ -25,7 +25,7 @@ export function load() {
     }
   } catch (e) {
     state.storageBroken = true;
-    setBanner('Saved data on this browser could not be read. New checks will not be stored until you clear saved data in Settings.');
+    setBanner('Saved data could not be read. New checks will not be stored until you clear saved data in Settings.');
     return;
   }
   if (!raw) return;
@@ -55,7 +55,7 @@ export function load() {
     for (i = 0; i < state.monitors.length; i += 1) seedSamples(state.monitors[i], state.log);
   } catch (e) {
     state.storageBroken = true;
-    setBanner('Saved data on this browser could not be read. New checks will not be stored until you clear saved data in Settings.');
+    setBanner('Saved data could not be read. New checks will not be stored until you clear saved data in Settings.');
   }
 }
 
@@ -68,6 +68,6 @@ export function save() {
       settings: state.settings
     }));
   } catch (e) {
-    setBanner('Could not store data in this browser. The list is still on screen, and it may be gone after a reload.');
+    setBanner('Could not store data. The list is still on screen, and it may be gone after a reload.');
   }
 }

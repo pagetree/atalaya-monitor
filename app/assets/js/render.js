@@ -1,5 +1,5 @@
 import { INTERVALS, els, state } from './state.js';
-import { $, ago, clock, esc, isQueued, parseUrl, stamp } from './util.js';
+import { $, clock, esc, isQueued, parseUrl, stamp } from './util.js';
 import { GLOBE, ico } from './icons.js';
 import { sampleTone, toneWord, uptimeText } from './samples.js';
 
@@ -73,61 +73,14 @@ function pillFor(monitor) {
   return { tone: 'wait', word: 'Waiting' };
 }
 
-function latestCheck() {
-  var latest = 0;
-  var i;
-  for (i = 0; i < state.monitors.length; i += 1) {
-    var last = state.monitors[i].last;
-    if (last && last.at > latest) latest = last.at;
-  }
-  return latest;
-}
-
 export function renderSummary() {
-  var total = state.monitors.length;
   var checking = 0;
-  var down = 0;
-  var slow = 0;
-  var up = 0;
   var i;
   for (i = 0; i < state.monitors.length; i += 1) {
-    var m = state.monitors[i];
-    if (isQueued(m.id)) checking += 1;
-    if (m.paused || !m.last) continue;
-    var tone = sampleTone(m.last);
-    if (tone === 'down') down += 1;
-    else if (tone === 'slow') slow += 1;
-    else if (tone === 'up') up += 1;
+    if (isQueued(state.monitors[i].id)) checking += 1;
   }
-
   els.logStatus.hidden = checking === 0;
-  els.count.textContent = 'Monitors (' + total + ')';
-
-  var word = 'No monitors yet';
-  var card = '';
-  if (!total) {
-    word = 'No monitors yet';
-  } else if (down) {
-    word = 'A service is down';
-    card = 'card-down';
-  } else if (slow) {
-    word = 'A service is slow';
-    card = 'card-slow';
-  } else if (up) {
-    word = 'All systems operational';
-    card = 'card-up';
-  } else {
-    word = 'Waiting for a check';
-  }
-
-  els.card.className = 'status-card' + (card ? ' ' + card : '');
-  els.summary.innerHTML = '<span class="dot" aria-hidden="true"></span>' + word;
-  document.title = word + ', atalaya';
-
-  var when = latestCheck();
-  if (checking && !when) els.detail.innerHTML = '<span class="with-ico">' + ico('check') + 'Checking now.</span>';
-  else if (when) els.detail.innerHTML = '<span class="with-ico">' + ico('clock') + 'Last check: ' + esc(clock(when)) + ' (' + esc(ago(when)) + ')</span>';
-  else els.detail.innerHTML = '<span class="with-ico">' + ico('clock') + 'No checks yet.</span>';
+  els.count.textContent = 'Monitors (' + state.monitors.length + ')';
 }
 
 export function renderRows() {
@@ -233,6 +186,46 @@ export function renderAlerts() {
   els.alerts.innerHTML = html || '<li><span class="event-name empty">' + ico('empty') + 'No alerts.</span></li>';
 }
 
+export function renderStatus() {
+  if (!els.statusBanner || !els.statusList) return;
+  var total = state.monitors.length;
+  var down = 0;
+  var slow = 0;
+  var up = 0;
+  var i;
+  for (i = 0; i < state.monitors.length; i += 1) {
+    var item = state.monitors[i];
+    if (item.paused || !item.last) continue;
+    var tone = sampleTone(item.last);
+    if (tone === 'down') down += 1;
+    else if (tone === 'slow') slow += 1;
+    else if (tone === 'up') up += 1;
+  }
+  var word = 'No services yet';
+  if (total && down) word = 'A service is down';
+  else if (total && slow) word = 'A service is slow';
+  else if (total && up) word = 'All systems operational';
+  else if (total) word = 'Waiting for a check';
+  els.statusBanner.textContent = word;
+
+  if (!total) {
+    els.statusList.innerHTML = '<li class="status-empty">No services on this page yet.</li>';
+    return;
+  }
+  var html = '';
+  for (i = 0; i < state.monitors.length; i += 1) {
+    var monitor = state.monitors[i];
+    var pill = pillFor(monitor);
+    var uptime = uptimeText(monitor);
+    html += '<li>';
+    html += '<span class="status-name">' + esc(monitor.name) + '</span>';
+    html += '<span class="status-meta">' + (uptime === 'no data' ? '' : esc(uptime)) + '</span>';
+    html += '<span class="pill pill-' + pill.tone + '"><span class="dot" aria-hidden="true"></span>' + pill.word + '</span>';
+    html += '</li>';
+  }
+  els.statusList.innerHTML = html;
+}
+
 export function renderLog() {
   if (!state.log.length) {
     els.logRows.innerHTML = '<tr class="is-empty"><td colspan="4"><span class="empty">' + ico('empty') + 'No checks yet. They show up here after the first check finishes.</span></td></tr>';
@@ -263,5 +256,6 @@ export function render() {
   renderRows();
   renderRecent();
   renderAlerts();
+  renderStatus();
   renderLog();
 }

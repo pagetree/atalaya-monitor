@@ -23,7 +23,7 @@
           <label class="every-opt"><input type="radio" name="interval" value="3600000"><span>1 hour</span></label>
         </div>
       </fieldset>
-      <p class="hint">Warning means a reply over 2 seconds, or a status code this browser could not read.</p>
+      <p class="hint">Warning means a reply over 2 seconds, or a status code that could not be read.</p>
       <p id="form-error" class="form-error" role="alert" hidden></p>
       <button type="submit" class="solid">Add monitor</button>
     </div>

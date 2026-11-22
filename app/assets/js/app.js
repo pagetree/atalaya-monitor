@@ -188,43 +188,48 @@ function onAdd(event) {
 
 function syncView() {
   var hash = location.hash.replace(/^#/, '');
-  var page = hash === 'log' || hash === 'settings' || hash === 'alerts' || hash === 'add' ? hash : 'monitors';
-  var view = page === 'log' || page === 'settings' || page === 'alerts' ? page : 'monitors';
-  $('view-monitors').hidden = view !== 'monitors';
-  $('view-log').hidden = view !== 'log';
-  $('view-settings').hidden = view !== 'settings';
-  $('view-alerts').hidden = view !== 'alerts';
+  if (hash === 'logs') hash = 'log';
+  var known = hash === 'main' || hash === 'monitors' || hash === 'log' || hash === 'settings' || hash === 'alerts' || hash === 'add' || hash === 'status';
+  var page = known ? hash : 'main';
+  $('view-main').hidden = page !== 'main';
+  $('view-monitors').hidden = page !== 'monitors' && page !== 'add';
+  $('view-log').hidden = page !== 'log';
+  $('view-settings').hidden = page !== 'settings';
+  $('view-alerts').hidden = page !== 'alerts';
+  $('view-status').hidden = page !== 'status';
   setAddOpen(page === 'add');
   var titles = {
-    monitors: ['Monitors', 'Addresses you are watching from this browser.'],
-    add: ['Add a monitor', 'Paste an http or https address. The check runs in this browser.'],
-    alerts: ['Alerts', 'Notices from the checks stored in this browser.'],
-    log: ['Log', 'Every check stored in this browser.'],
-    settings: ['Saved data', 'Monitors and the log stored in this browser.']
+    main: ['Main', 'The state of the services you watch.'],
+    monitors: ['Monitors', 'Addresses you are watching.'],
+    add: ['Add a monitor', 'Paste an http or https address.'],
+    alerts: ['Alerts', 'Notices from your checks.'],
+    log: ['Logs', 'Every check on the board.'],
+    status: ['Public Status Page', 'What visitors see about these services.'],
+    settings: ['Saved data', 'Monitors and the log for this board.']
   };
-  var copy = titles[page] || titles.monitors;
+  var copy = titles[page] || titles.main;
   var titleEl = $('dash-title');
   var ledeEl = $('dash-title-lede');
   if (titleEl) titleEl.textContent = copy[0];
   if (ledeEl) ledeEl.textContent = copy[1];
   document.title = copy[0] + ' · atalaya';
+  var current = page === 'add' ? 'monitors' : page;
   var links = document.querySelectorAll('.page-nav a');
   var i;
   for (i = 0; i < links.length; i += 1) {
-    if (links[i].getAttribute('href') === '#' + page) links[i].setAttribute('aria-current', 'page');
+    if (links[i].getAttribute('href') === '#' + current) links[i].setAttribute('aria-current', 'page');
     else links[i].removeAttribute('aria-current');
   }
 }
 
 export function init() {
   els.banner = $('banner');
-  els.summary = $('summary');
-  els.detail = $('summary-detail');
-  els.card = $('status-card');
   els.count = $('monitors-count');
   els.rows = $('monitor-rows');
   els.recent = $('recent');
   els.alerts = $('alert-list');
+  els.statusBanner = $('status-banner');
+  els.statusList = $('status-list');
   els.logRows = $('log-rows');
   els.logStatus = $('log-status');
   els.form = $('add-form');
@@ -235,7 +240,7 @@ export function init() {
   els.form.interval.value = String(state.settings.interval);
 
   if (!location.hash || location.hash === '#') {
-    history.replaceState(null, '', '#monitors');
+    history.replaceState(null, '', '#main');
   }
 
   document.addEventListener('click', onClick);

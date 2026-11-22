@@ -135,7 +135,7 @@ $verified = !empty($appProfile['email_verified_at']);
 
     <div class="sheet-block">
       <h2>Regional preferences</h2>
-      <p class="sheet-sub">Saved on the account. The board still shows times in this browser.</p>
+      <p class="sheet-sub">Saved on the account.</p>
       <div class="field-grid">
         <label class="field">
           <span class="label-row">Preferred timezone <abbr class="hint-mark" title="Stored for this account.">i</abbr></span>

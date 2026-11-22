@@ -1,7 +1,7 @@
 <?php
 
-$headTitle = 'Monitors';
-$headLede = 'Addresses you are watching from this browser.';
+$headTitle = 'Main';
+$headLede = 'The state of the services you watch.';
 $headTitleId = 'dash-title';
 $headNav = require __DIR__ . '/nav.php';
 ?>

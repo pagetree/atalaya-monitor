@@ -108,7 +108,7 @@
         </div>
         <aside class="split-col note">
           <h2><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.2V11.2M8 5h.01"/></svg>What you get</h2>
-          <p>You see the failure on your board before a user has to tell you. The list and the log stay in this browser.</p>
+          <p>You see the failure on your board before a user has to tell you.</p>
           <hr>
           <p>No ads. Free.</p>
         </aside>
@@ -164,7 +164,7 @@
         <a href="app/#log">Log</a>
         <a href="app/#settings">Settings</a>
       </nav>
-      <p class="floor-meta">Free. No ads. Saved in this browser.</p>
+      <p class="floor-meta">Free. No ads.</p>
     </div>
   </footer>
 </body>
