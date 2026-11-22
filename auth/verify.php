@@ -16,7 +16,7 @@ if ($pending === null) {
 }
 
 $error = auth_flash_get('error');
-$notice = auth_flash_get('notice');
+auth_flash_get('notice');
 $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pending['email'];
 ?>
 <!DOCTYPE html>
@@ -31,7 +31,6 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
   <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
   <header class="top code-shell">
     <a class="brand" href="../">
       <img class="pulse" src="../assets/img/logo-icon.svg" alt="atalaya" width="48" height="34">
@@ -46,15 +45,11 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
 
   <main id="content" class="shell code-shell" tabindex="-1">
     <section class="panel" aria-labelledby="verify-title">
-      <p class="kicker">Check your inbox</p>
       <h1 id="verify-title">Enter the 9 digit code</h1>
       <p class="lede">We sent a code to <?= htmlspecialchars($masked, ENT_QUOTES, 'UTF-8') ?>. It stays valid for 30 minutes.</p>
 
       <?php if ($error !== null): ?>
         <p class="banner" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-      <?php endif; ?>
-      <?php if ($notice !== null): ?>
-        <p class="banner ok" role="status"><?= htmlspecialchars($notice, ENT_QUOTES, 'UTF-8') ?></p>
       <?php endif; ?>
 
       <form class="stack" method="post" action="actions/confirm.php">

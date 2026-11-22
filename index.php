@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
   <?php require __DIR__ . '/includes/home-header.php'; ?>
 
   <main id="content" tabindex="-1">

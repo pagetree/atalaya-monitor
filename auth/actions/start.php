@@ -25,7 +25,6 @@ try {
     $code = auth_create_login_code((string) $user['id']);
     auth_send_code_email((string) $user['email'], $code);
     auth_set_pending_user((string) $user['id'], (string) $user['email']);
-    auth_flash_set('notice', 'We sent a 9 digit code to your email. It is valid for 30 minutes.');
     auth_redirect('/auth/verify.php');
 } catch (Throwable $e) {
     auth_flash_set('error', 'Could not start sign in. Try again in a moment.');

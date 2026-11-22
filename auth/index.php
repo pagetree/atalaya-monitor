@@ -24,7 +24,6 @@ $notice = auth_flash_get('notice');
   <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
   <header class="top">
     <a class="brand" href="../">
       <img class="pulse" src="../assets/img/logo-icon.svg" alt="atalaya" width="48" height="34">
@@ -39,7 +38,6 @@ $notice = auth_flash_get('notice');
 
   <main id="content" class="shell" tabindex="-1">
     <section class="panel" aria-labelledby="auth-title">
-      <p class="kicker">Atalaya account</p>
       <h1 id="auth-title">Your email</h1>
       <p class="lede">If the email is new, we create the account. Then we email a 9 digit code.</p>
 

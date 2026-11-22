@@ -9,4 +9,3 @@
   <link rel="stylesheet" href="assets/css/atalaya.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
