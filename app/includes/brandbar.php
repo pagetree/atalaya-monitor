@@ -1,7 +1,6 @@
 <?php
 
-$profileReady = !empty($appProfile['ready']);
-$homeHref = $profileReady ? 'index.php' : 'settings.php?tab=profile';
+$homeHref = 'index.php';
 $onAccount = !empty($onAccount);
 ?>
 <div class="dash-brand">

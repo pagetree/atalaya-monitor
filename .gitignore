@@ -15,3 +15,5 @@ node_modules/
 Thumbs.db
 
 assets/img/insp/*.pdf
+app/uploads/avatars/*
+!app/uploads/avatars/.htaccess

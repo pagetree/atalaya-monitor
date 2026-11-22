@@ -1,0 +1,291 @@
+/* One sheet for account pages. The shadow marks that single surface.
+   Black is the commit action. Red is only the picture delete. Green is only Verified. */
+
+.sheet-card {
+  max-width: 920px;
+  margin-top: 22px;
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.06);
+  overflow: hidden;
+}
+
+.sheet-block {
+  padding: 22px 22px 20px;
+}
+
+.sheet-block + .sheet-block,
+form .sheet-block {
+  border-top: 1px solid #ececec;
+}
+
+.sheet-card h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.sheet-sub,
+.sheet-card .sheet-block > p {
+  margin: 4px 0 0;
+  color: #3d3d3d;
+  font-size: 0.98rem;
+}
+
+.sheet-wait {
+  margin: 0;
+  padding: 0 22px 4px;
+  color: #3d3d3d;
+}
+
+.portrait {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.portrait-face {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #141414;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.35rem;
+  overflow: hidden;
+  flex: none;
+}
+
+.portrait-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.portrait-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 22px;
+  margin-top: 18px;
+}
+
+.sheet-card .field {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.sheet-card input,
+.sheet-card select {
+  min-height: 44px;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+}
+
+.sheet-card input[readonly] {
+  background: #f6f6f6;
+  color: #141414;
+}
+
+.label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #5c5c5c;
+  border-radius: 50%;
+  color: #3d3d3d;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.email-row,
+.with-prefix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  background: #fff;
+  padding-right: 8px;
+}
+
+.email-row {
+  background: #f6f6f6;
+}
+
+.email-row input,
+.with-prefix input {
+  border: 0;
+  background: transparent;
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.with-prefix span {
+  padding-left: 12px;
+  color: #3d3d3d;
+  font-weight: 600;
+}
+
+.field-note {
+  color: #3d3d3d;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.verified {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #e7f6ec;
+  color: #0b5d24;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sheet-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  background: #f6f6f6;
+  border-top: 1px solid #ececec;
+}
+
+.sheet-foot p {
+  margin: 0;
+  color: #3d3d3d;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.sheet-card .btn-ink,
+.sheet-card .btn-quiet,
+.sheet-card .btn-danger {
+  min-height: 44px;
+  height: auto;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 0.95rem;
+}
+
+.sheet-card .btn-ink,
+.sheet-card .btn-ink:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #141414;
+  border-color: #141414;
+  color: #fff;
+  text-decoration: none;
+}
+
+.sheet-card .btn-ink:hover,
+.sheet-card .btn-ink:active {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.sheet-card .btn-quiet,
+.sheet-card .btn-quiet:hover,
+.sheet-card .btn-quiet:active {
+  background: #fff;
+  border-color: #cfcfcf;
+  color: #141414;
+}
+
+.sheet-card .btn-danger {
+  width: 44px;
+  padding: 0;
+  background: #fff;
+  border-color: #e7b4b4;
+  color: #9b1b1b;
+}
+
+.sheet-card .btn-danger:hover,
+.sheet-card .btn-danger:active {
+  background: #fdecec;
+  border-color: #9b1b1b;
+  color: #9b1b1b;
+}
+
+.file-btn {
+  position: relative;
+  cursor: pointer;
+}
+
+.file-btn input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-btn:focus-within {
+  outline: 2px solid #0033a0;
+  outline-offset: 2px;
+}
+
+@media (max-width: 800px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-block,
+  .sheet-foot,
+  .sheet-wait {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .sheet-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sheet-actions {
+    width: 100%;
+  }
+
+  .sheet-actions button {
+    flex: 1;
+  }
+}

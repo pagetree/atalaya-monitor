@@ -6,8 +6,7 @@ require_once __DIR__ . '/includes/bootstrap.php';
 
 $user = auth_user();
 if ($user !== null) {
-    $profile = auth_load_profile($user['id']);
-    auth_redirect(!empty($profile['ready']) ? '/app/' : '/app/settings.php?tab=profile');
+    auth_redirect('/app/');
 }
 
 $error = auth_flash_get('error');

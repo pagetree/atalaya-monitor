@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/includes/guard.php';
+require __DIR__ . '/includes/avatar.php';
 
 [$appUser, $appProfile] = app_boot();
 $onAccount = true;
@@ -23,8 +24,6 @@ if (isset($_SESSION['profile_draft']) && is_array($_SESSION['profile_draft'])) {
     $draft = $_SESSION['profile_draft'];
     unset($_SESSION['profile_draft']);
 }
-$givenValue = $draft['given_name'] ?? $appProfile['given_name'];
-$familyValue = $draft['family_name'] ?? $appProfile['family_name'];
 
 $error = auth_flash_get('error');
 $notice = auth_flash_get('notice');
@@ -66,61 +65,32 @@ require __DIR__ . '/includes/head.php';
     <p class="banner ok" role="status"><?= htmlspecialchars($notice, ENT_QUOTES, 'UTF-8') ?></p>
   <?php endif; ?>
 
-  <?php if (empty($appProfile['storage'])): ?>
-    <p class="lock" role="status">Names cannot be saved yet. The account table does not have the name fields.</p>
-  <?php elseif (empty($appProfile['ready']) && $tab !== 'profile'): ?>
-    <p class="lock" role="status">Save your first and last name on <a href="settings.php?tab=profile">Profile</a>. The board stays closed until then.</p>
-  <?php endif; ?>
-
   <?php if ($tab === 'general'): ?>
-    <div class="panel">
-      <p>Signed in as <?= htmlspecialchars((string) $appUser['email'], ENT_QUOTES, 'UTF-8') ?>.</p>
-      <?php if (!empty($appProfile['ready'])): ?>
-        <p><?= htmlspecialchars($appProfile['given_name'] . ' ' . $appProfile['family_name'], ENT_QUOTES, 'UTF-8') ?> can open the board.</p>
-        <p><a class="act" href="index.php">Open the board</a></p>
-      <?php else: ?>
-        <p>The board stays closed until the name on Profile is saved.</p>
-      <?php endif; ?>
+    <div class="sheet-card">
+      <div class="sheet-block">
+        <h2>Account</h2>
+        <p class="sheet-sub">Signed in as <?= htmlspecialchars((string) $appUser['email'], ENT_QUOTES, 'UTF-8') ?>.</p>
+        <?php $shownName = trim($appProfile['given_name'] . ' ' . $appProfile['family_name']); ?>
+        <?php if ($shownName !== ''): ?>
+          <p><?= htmlspecialchars($shownName, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
+        <p><a href="index.php">Open the board</a></p>
+      </div>
     </div>
   <?php elseif ($tab === 'profile'): ?>
-    <div class="panel">
-      <?php if (empty($appProfile['storage'])): ?>
-        <p>The form opens once the name fields exist on the account.</p>
-      <?php else: ?>
-      <?php if (empty($appProfile['ready'])): ?>
-        <p class="lock" role="status">The board stays closed until this name is saved.</p>
-      <?php else: ?>
-        <p>This is the name on the account. <a href="index.php">Open the board</a>.</p>
-      <?php endif; ?>
-      <form class="profile-form" method="post" action="actions/save-profile.php">
-        <label>
-          First name
-          <input type="text" name="given_name" required maxlength="80" autocomplete="given-name" value="<?= htmlspecialchars((string) $givenValue, ENT_QUOTES, 'UTF-8') ?>">
-        </label>
-        <label>
-          Last name
-          <input type="text" name="family_name" required maxlength="80" autocomplete="family-name" value="<?= htmlspecialchars((string) $familyValue, ENT_QUOTES, 'UTF-8') ?>">
-        </label>
-        <button class="solid" type="submit">Save your name</button>
-      </form>
-      <?php endif; ?>
-    </div>
+    <?php if (empty($appProfile['storage'])): ?>
+      <div class="sheet-card"><div class="sheet-block"><p>The form opens once the name fields exist on the account.</p></div></div>
+    <?php else: ?>
+      <?php require __DIR__ . '/includes/view-profile.php'; ?>
+    <?php endif; ?>
   <?php elseif ($tab === 'members'): ?>
-    <div class="panel">
-      <p>This account is only you. Adding other people is not open yet.</p>
-    </div>
+    <div class="sheet-card"><div class="sheet-block"><h2>Members</h2><p class="sheet-sub">This account is only you. Adding other people is not open yet.</p></div></div>
   <?php elseif ($tab === 'permissions'): ?>
-    <div class="panel">
-      <p>You are the only person with access. Roles are not open yet.</p>
-    </div>
+    <div class="sheet-card"><div class="sheet-block"><h2>Permissions</h2><p class="sheet-sub">You are the only person with access. Roles for other people are not open yet.</p></div></div>
   <?php elseif ($tab === 'notifications'): ?>
-    <div class="panel">
-      <p>Sign in codes go to <?= htmlspecialchars((string) $appUser['email'], ENT_QUOTES, 'UTF-8') ?>. Monitor alerts stay on the board, after your name is saved.</p>
-    </div>
+    <div class="sheet-card"><div class="sheet-block"><h2>Notifications</h2><p class="sheet-sub">Sign in codes go to <?= htmlspecialchars((string) $appUser['email'], ENT_QUOTES, 'UTF-8') ?>. Monitor alerts stay on the board.</p></div></div>
   <?php else: ?>
-    <div class="panel">
-      <p>No tools are connected. Connections are not open yet.</p>
-    </div>
+    <div class="sheet-card"><div class="sheet-block"><h2>Integrations</h2><p class="sheet-sub">No tools are connected. Connections are not open yet.</p></div></div>
   <?php endif; ?>
 </main>
 </body>

@@ -13,10 +13,3 @@ function app_boot(): array
 
     return [$user, auth_load_profile($user['id'])];
 }
-
-function app_require_profile(array $profile): void
-{
-    if (empty($profile['ready'])) {
-        auth_redirect('/app/settings.php?tab=profile');
-    }
-}
