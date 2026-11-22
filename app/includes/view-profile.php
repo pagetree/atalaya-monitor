@@ -65,14 +65,13 @@ $verified = !empty($appProfile['email_verified_at']);
             </label>
             <noscript><button class="btn-ink" type="submit">Upload picture</button></noscript>
           </form>
-          <?php if ($avatar !== null): ?>
-            <form method="post" action="actions/avatar.php">
-              <input type="hidden" name="remove" value="1">
-              <button class="btn-danger" type="submit" aria-label="Remove profile picture">
-                <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.2h10M6.2 4.2V2.8h3.6v1.4M4.2 4.2l.6 9h6.4l.6-9"/></svg>
-              </button>
-            </form>
-          <?php endif; ?>
+          <form method="post" action="actions/avatar.php">
+            <input type="hidden" name="remove" value="1">
+            <button class="btn-danger" type="submit">
+              <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.2h10M6.2 4.2V2.8h3.6v1.4M4.2 4.2l.6 9h6.4l.6-9"/></svg>
+              Remove
+            </button>
+          </form>
         </div>
       </div>
     </div>

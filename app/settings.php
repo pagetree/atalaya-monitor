@@ -45,7 +45,6 @@ foreach ($tabs as $key => $label) {
 $headTitle = 'Settings';
 $headLede = 'Your profile, the alert list, and the check log.';
 $pageTitle = 'Settings · atalaya';
-$bodyClass = 'account';
 
 require __DIR__ . '/includes/head.php';
 ?>
