@@ -209,37 +209,34 @@ input[type="text"] {
   font-weight: 700;
 }
 
+.code-shell {
+  width: min(100% - 32px, 760px);
+}
+
 .digits {
   display: grid;
-  grid-template-columns: repeat(9, 48px);
-  gap: 8px;
+  grid-template-columns: repeat(9, 68px);
+  gap: 10px;
 }
 
 .digits input {
-  width: 48px;
-  height: 48px;
-  min-height: 48px;
+  width: 68px;
+  height: 68px;
+  min-height: 68px;
   padding: 0;
   border: 1px solid #141414;
   border-radius: 5px;
   background: #fff;
   color: #141414;
   font: inherit;
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 700;
   text-align: center;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 720px) {
   .digits {
-    grid-template-columns: repeat(3, 52px);
-    gap: 10px;
-  }
-
-  .digits input {
-    width: 52px;
-    height: 52px;
-    min-height: 52px;
+    grid-template-columns: repeat(3, 68px);
   }
 }
 
@@ -274,6 +271,12 @@ button.solid:active {
 
 button.solid:active {
   transform: translateY(1px);
+}
+
+button.solid.fit {
+  justify-self: start;
+  width: auto;
+  padding: 0 22px;
 }
 
 .foot {

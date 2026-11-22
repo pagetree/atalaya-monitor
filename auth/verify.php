@@ -32,7 +32,7 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
 </head>
 <body>
   <a class="skip" href="#content">Skip to content</a>
-  <header class="top">
+  <header class="top code-shell">
     <a class="brand" href="../">
       <img class="pulse" src="../assets/img/logo-icon.svg" alt="atalaya" width="48" height="34">
       <span class="mark-reveal">
@@ -44,7 +44,7 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
     <a class="top-link" href="./">Use another email</a>
   </header>
 
-  <main id="content" class="shell" tabindex="-1">
+  <main id="content" class="shell code-shell" tabindex="-1">
     <section class="panel" aria-labelledby="verify-title">
       <p class="kicker">Check your inbox</p>
       <h1 id="verify-title">Enter the 9 digit code</h1>
@@ -66,7 +66,7 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
             <?php endfor; ?>
           </div>
         </fieldset>
-        <button class="solid" type="submit">Verify and open the board</button>
+        <button class="solid fit" type="submit">Verify and open the board</button>
       </form>
 
       <p class="foot">Wrong account? <a href="./">Go back</a> and start again.</p>
