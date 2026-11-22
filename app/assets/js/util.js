@@ -54,14 +54,34 @@ export function cleanPeriod(n) {
 }
 
 export function cleanKind(value) {
-  if (value === 'api' || value === 'keyword' || value === 'website') return value;
+  if (value === 'api' || value === 'keyword' || value === 'website' || value === 'port') return value;
   return 'website';
 }
 
-export function cleanSlow(n) {
-  n = Number(n);
-  if (n === 1000 || n === 2000 || n === 5000) return n;
-  return 2000;
+export function cleanPort(n) {
+  n = Math.round(Number(n));
+  if (!isFinite(n) || n < 1 || n > 65535) return 0;
+  return n;
+}
+
+export function portUrl(raw, port) {
+  port = cleanPort(port);
+  if (!port) return '';
+  var text = String(raw || '').trim();
+  if (!text) return '';
+  if (!/^https?:\/\//i.test(text)) text = 'http://' + text;
+  try {
+    var url = new URL(text);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return '';
+    if (!url.hostname) return '';
+    url.port = String(port);
+    url.pathname = '/';
+    url.search = '';
+    url.hash = '';
+    return url.href;
+  } catch (e) {
+    return '';
+  }
 }
 
 export function cleanRegions(list) {

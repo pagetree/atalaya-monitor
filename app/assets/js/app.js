@@ -1,5 +1,5 @@
 import { KEY, els, state } from './state.js';
-import { $, cleanInterval, cleanKind, cleanPeriod, cleanSlow, hostFrom, parseUrl, uid } from './util.js';
+import { $, cleanInterval, cleanKind, cleanPeriod, cleanPort, hostFrom, parseUrl, portUrl, uid } from './util.js';
 import { load, save, setBanner, setFormError } from './storage.js';
 import { render, renderRows } from './render.js';
 import { enqueue, findMonitor, tick } from './checks.js';
@@ -131,11 +131,29 @@ function onClick(event) {
 function onAdd(event) {
   event.preventDefault();
   var form = els.form;
-  var url = parseUrl(form.url.value);
-  if (!url) {
-    setFormError('Enter a full http or https address.');
-    form.url.focus();
-    return;
+  var kind = cleanKind(form.kind.value);
+  var port = 0;
+  var url = '';
+  if (kind === 'port') {
+    port = cleanPort(form.port && form.port.value);
+    if (!port) {
+      setFormError('Enter a port from 1 to 65535.');
+      if (form.port) form.port.focus();
+      return;
+    }
+    url = portUrl(form.url.value, port);
+    if (!url) {
+      setFormError('Enter the host for this port.');
+      form.url.focus();
+      return;
+    }
+  } else {
+    url = parseUrl(form.url.value);
+    if (!url) {
+      setFormError('Enter a full http or https address.');
+      form.url.focus();
+      return;
+    }
   }
   var regionBoxes = form.querySelectorAll('input[name="region"]:checked');
   if (!regionBoxes.length) {
@@ -150,7 +168,6 @@ function onAdd(event) {
   var regions = [];
   var r;
   for (r = 0; r < regionBoxes.length; r += 1) regions.push(regionBoxes[r].value);
-  var kind = cleanKind(form.kind.value);
   var phrase = form.phrase ? form.phrase.value.trim().slice(0, 120) : '';
   if (kind === 'keyword' && !phrase) {
     setFormError('Type the phrase this page must contain.');
@@ -159,14 +176,13 @@ function onAdd(event) {
   }
   var name = form.name.value.trim().slice(0, 80);
   var interval = cleanInterval(Number(form.interval.value));
-  var slowMs = cleanSlow(Number(form.slow.value));
   state.monitors.push({
     id: uid(),
     name: name || hostFrom(url),
     url: url,
     kind: kind,
     phrase: kind === 'keyword' ? phrase : '',
-    slowMs: slowMs,
+    port: kind === 'port' ? port : 0,
     interval: interval,
     regions: regions,
     notify: notifyBox.value,
@@ -179,6 +195,7 @@ function onAdd(event) {
   form.name.value = '';
   form.url.value = '';
   if (form.phrase) form.phrase.value = '';
+  if (form.port) form.port.value = '';
   save();
   render();
   enqueue(state.monitors[state.monitors.length - 1].id);
@@ -259,9 +276,13 @@ export function init() {
 
   function syncKindFields() {
     var picked = els.form.querySelector('input[name="kind"]:checked');
-    var field = $('phrase-field');
-    if (!field) return;
-    field.hidden = !(picked && picked.value === 'keyword');
+    var kind = picked ? picked.value : 'website';
+    var phrase = $('phrase-field');
+    var port = $('port-field');
+    var address = els.form.url;
+    if (phrase) phrase.hidden = kind !== 'keyword';
+    if (port) port.hidden = kind !== 'port';
+    if (address) address.placeholder = kind === 'port' ? 'example.com' : 'https://';
   }
 
   els.form.addEventListener('change', function (event) {

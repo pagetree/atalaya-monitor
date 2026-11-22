@@ -1,5 +1,5 @@
 import { INTERVALS, STATES, state } from './state.js';
-import { cleanInterval, cleanKind, cleanPeriod, cleanRegions, cleanSlow, hostFrom, parseUrl } from './util.js';
+import { cleanInterval, cleanKind, cleanPeriod, cleanPort, cleanRegions, hostFrom, parseUrl } from './util.js';
 
 export function normalizeSamples(list) {
   if (!Array.isArray(list)) return [];
@@ -16,9 +16,7 @@ export function normalizeSamples(list) {
     if (seen[key]) continue;
     seen[key] = 1;
     var ms = sample.ms == null ? null : Number(sample.ms);
-    var slowMs = sample.slowMs == null ? null : cleanSlow(sample.slowMs);
-    if (sample.slowMs == null) slowMs = null;
-    out.push({ at: at, state: sample.state, ms: isFinite(ms) ? ms : null, slowMs: slowMs });
+    out.push({ at: at, state: sample.state, ms: isFinite(ms) ? ms : null });
   }
   out.sort(function (a, b) { return a.at - b.at; });
   if (out.length > 8000) out = out.slice(out.length - 8000);
@@ -43,8 +41,7 @@ export function sampleTone(item) {
   if (!item) return 'empty';
   if (item.state === 'down') return 'down';
   if (item.state === 'answered') return 'slow';
-  var limit = item.slowMs == null ? 2000 : cleanSlow(item.slowMs);
-  if (item.state === 'up' && item.ms != null && item.ms >= limit) return 'slow';
+  if (item.state === 'up' && item.ms != null && item.ms >= 2000) return 'slow';
   if (item.state === 'up') return 'up';
   return 'empty';
 }
@@ -181,8 +178,7 @@ export function normalizeLast(last) {
     state: last.state,
     code: isFinite(code) ? code : null,
     ms: isFinite(ms) ? ms : null,
-    note: typeof last.note === 'string' ? last.note.slice(0, 80) : '',
-    slowMs: last.slowMs == null ? null : cleanSlow(last.slowMs)
+    note: typeof last.note === 'string' ? last.note.slice(0, 80) : ''
   };
 }
 
@@ -193,13 +189,20 @@ export function normalizeMonitor(m) {
   var kind = cleanKind(m.kind);
   var phrase = typeof m.phrase === 'string' ? m.phrase.trim().slice(0, 120) : '';
   if (kind !== 'keyword') phrase = '';
+  var port = 0;
+  if (kind === 'port') {
+    port = cleanPort(m.port);
+    if (!port) {
+      try { port = cleanPort(new URL(url).port); } catch (e) { port = 0; }
+    }
+  }
   return {
     id: m.id,
     name: name || hostFrom(url),
     url: url,
     kind: kind,
     phrase: phrase,
-    slowMs: cleanSlow(m.slowMs),
+    port: port,
     interval: cleanInterval(Number(m.interval)),
     regions: cleanRegions(m.regions),
     notify: m.notify === 'email' ? 'email' : 'email',
@@ -225,8 +228,7 @@ export function normalizeLog(entry) {
     state: entry.state,
     code: isFinite(code) ? code : null,
     ms: isFinite(ms) ? ms : null,
-    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : '',
-    slowMs: entry.slowMs == null ? null : cleanSlow(entry.slowMs)
+    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : ''
   };
 }
 

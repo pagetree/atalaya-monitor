@@ -6,6 +6,7 @@ import { sampleTone, toneWord, uptimeText } from './samples.js';
 function kindLabel(kind) {
   if (kind === 'api') return 'API';
   if (kind === 'keyword') return 'Keyword';
+  if (kind === 'port') return 'Port';
   return 'Website';
 }
 

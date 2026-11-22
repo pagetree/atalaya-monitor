@@ -1,7 +1,6 @@
 /* Add monitor. The address is the wide field because that is what you came to type.
    Type cards are the large choice: they change what "up" means.
    Cadence chips stay short: each one is only a number.
-   Slow after is a vertical scale in the side column, so it does not compete with the five time chips.
    Blue #0033a0 marks a selected choice. Ink stays on the commit button.
    Radius 10px on a choice card, 8px on a field. One border color shift on hover, nothing else moves. */
 
@@ -17,21 +16,6 @@
 
 .add-notify {
   border-bottom: 0;
-}
-
-.add-pair {
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.72fr);
-  border-bottom: 1px solid #ececec;
-}
-
-.add-pair > .add-block {
-  border-bottom: 0;
-  min-width: 0;
-}
-
-.add-pair > .add-block + .add-block {
-  border-left: 1px solid #ececec;
 }
 
 .add-block-head h2 {
@@ -114,17 +98,12 @@
 }
 
 .kind-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .cadence-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.slow-grid {
-  grid-template-columns: 1fr;
-  gap: 8px;
 }
 
 .region-grid {
@@ -156,23 +135,14 @@
 }
 
 .kind-opt {
-  align-items: start;
-  min-height: 132px;
-  padding: 18px 16px 16px;
-}
-
-.kind-opt::before {
-  margin-top: 3px;
+  align-items: center;
+  min-height: 68px;
+  padding: 10px 12px;
 }
 
 .cadence-grid .every-opt {
   min-height: 70px;
   padding: 12px;
-}
-
-.slow-grid .every-opt {
-  min-height: 56px;
-  padding: 10px 14px;
 }
 
 .region-grid .every-opt {
@@ -219,8 +189,9 @@
   color: #141414;
 }
 
-.kind-opt .every-main {
-  font-size: 1.2rem;
+.kind-opt .every-sub {
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .every-sub {
@@ -262,8 +233,7 @@
 }
 
 .kind-grid .every-opt:has(input:checked)::before,
-.cadence-grid .every-opt:has(input:checked)::before,
-.slow-grid .every-opt:has(input:checked)::before {
+.cadence-grid .every-opt:has(input:checked)::before {
   border-color: #0033a0;
   background: #fff;
   box-shadow: inset 0 0 0 5px #0033a0;
@@ -307,15 +277,12 @@
 }
 
 @media (max-width: 980px) {
-  .add-pair,
-  .identity-grid,
-  .kind-grid {
+  .identity-grid {
     grid-template-columns: 1fr;
   }
 
-  .add-pair > .add-block + .add-block {
-    border-left: 0;
-    border-top: 1px solid #ececec;
+  .kind-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
   .cadence-grid {
@@ -326,9 +293,6 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .kind-opt {
-    min-height: 0;
-  }
 }
 
 @media (max-width: 640px) {
@@ -336,6 +300,7 @@
     padding: 22px 18px;
   }
 
+  .kind-grid,
   .cadence-grid,
   .region-grid,
   .notify-grid {
@@ -345,7 +310,6 @@
   .kind-opt,
   .region-grid .every-opt,
   .cadence-grid .every-opt,
-  .slow-grid .every-opt,
   .notify-grid .every-opt {
     min-height: 56px;
   }

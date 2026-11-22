@@ -27,17 +27,22 @@
           <label class="every-opt kind-opt">
             <input type="radio" name="kind" value="website" checked>
             <span class="every-main">Website</span>
-            <span class="every-sub">A public page. A readable 2xx reply counts as up.</span>
+            <span class="every-sub">A 2xx reply counts as up.</span>
           </label>
           <label class="every-opt kind-opt">
             <input type="radio" name="kind" value="api">
             <span class="every-main">API</span>
-            <span class="every-sub">An endpoint. A 2xx that comes back as a web page is only a warning.</span>
+            <span class="every-sub">A web page reply is a warning.</span>
           </label>
           <label class="every-opt kind-opt">
             <input type="radio" name="kind" value="keyword">
             <span class="every-main">Keyword</span>
-            <span class="every-sub">The reply must contain a phrase you choose.</span>
+            <span class="every-sub">The reply must contain a phrase.</span>
+          </label>
+          <label class="every-opt kind-opt">
+            <input type="radio" name="kind" value="port">
+            <span class="every-main">Port</span>
+            <span class="every-sub">An open port counts as up.</span>
           </label>
         </div>
       </fieldset>
@@ -45,38 +50,27 @@
         <span class="lab">Phrase</span>
         <input name="phrase" maxlength="120" autocomplete="off" placeholder="Words that must appear in the reply">
       </label>
+      <label class="phrase-field" id="port-field" hidden>
+        <span class="lab">Port</span>
+        <input name="port" type="number" inputmode="numeric" min="1" max="65535" step="1" placeholder="443">
+      </label>
     </section>
 
-    <div class="add-pair">
-      <section class="add-block">
-        <div class="add-block-head">
-          <h2>How often</h2>
-          <p>How many times a day we request this address.</p>
+    <section class="add-block">
+      <div class="add-block-head">
+        <h2>How often</h2>
+        <p>How many times a day we request this address.</p>
+      </div>
+      <fieldset class="every" aria-label="Check every">
+        <div class="every-grid cadence-grid">
+          <label class="every-opt"><input type="radio" name="interval" value="60000"><span class="every-main">1 min</span><span class="every-sub">1,440 a day</span></label>
+          <label class="every-opt"><input type="radio" name="interval" value="300000" checked><span class="every-main">5 min</span><span class="every-sub">288 a day</span></label>
+          <label class="every-opt"><input type="radio" name="interval" value="900000"><span class="every-main">15 min</span><span class="every-sub">96 a day</span></label>
+          <label class="every-opt"><input type="radio" name="interval" value="1800000"><span class="every-main">30 min</span><span class="every-sub">48 a day</span></label>
+          <label class="every-opt"><input type="radio" name="interval" value="3600000"><span class="every-main">1 hour</span><span class="every-sub">24 a day</span></label>
         </div>
-        <fieldset class="every" aria-label="Check every">
-          <div class="every-grid cadence-grid">
-            <label class="every-opt"><input type="radio" name="interval" value="60000"><span class="every-main">1 min</span><span class="every-sub">1,440 a day</span></label>
-            <label class="every-opt"><input type="radio" name="interval" value="300000" checked><span class="every-main">5 min</span><span class="every-sub">288 a day</span></label>
-            <label class="every-opt"><input type="radio" name="interval" value="900000"><span class="every-main">15 min</span><span class="every-sub">96 a day</span></label>
-            <label class="every-opt"><input type="radio" name="interval" value="1800000"><span class="every-main">30 min</span><span class="every-sub">48 a day</span></label>
-            <label class="every-opt"><input type="radio" name="interval" value="3600000"><span class="every-main">1 hour</span><span class="every-sub">24 a day</span></label>
-          </div>
-        </fieldset>
-      </section>
-      <section class="add-block">
-        <div class="add-block-head">
-          <h2>Slow after</h2>
-          <p>A reply slower than this is a warning. No reply is down.</p>
-        </div>
-        <fieldset class="every" aria-label="Slow after">
-          <div class="every-grid slow-grid">
-            <label class="every-opt"><input type="radio" name="slow" value="1000"><span class="every-main">1 second</span><span class="every-sub">Tight</span></label>
-            <label class="every-opt"><input type="radio" name="slow" value="2000" checked><span class="every-main">2 seconds</span><span class="every-sub">Usual</span></label>
-            <label class="every-opt"><input type="radio" name="slow" value="5000"><span class="every-main">5 seconds</span><span class="every-sub">Patient</span></label>
-          </div>
-        </fieldset>
-      </section>
-    </div>
+      </fieldset>
+    </section>
 
     <section class="add-block">
       <div class="add-block-head">

@@ -28,7 +28,8 @@ function runCheck(id) {
   }
   inflight.add(id);
   render();
-  probe(monitor).then(function (result) {
+  var job = monitor.kind === 'port' ? probePort(monitor) : probe(monitor);
+  job.then(function (result) {
     finishCheck(id, result);
   }, function () {
     finishCheck(id, { state: 'down', code: null, ms: null, note: 'no response' });
@@ -43,14 +44,12 @@ function finishCheck(id, result) {
     if (state.monitors[i].id === id) current = state.monitors[i];
   }
   if (current) {
-    var slowMs = current.slowMs == null ? 2000 : current.slowMs;
     current.last = {
       at: Date.now(),
       state: result.state,
       code: result.code,
       ms: result.ms,
-      note: result.note || '',
-      slowMs: slowMs
+      note: result.note || ''
     };
     state.log.unshift({
       at: current.last.at,
@@ -59,12 +58,11 @@ function finishCheck(id, result) {
       state: result.state,
       code: result.code,
       ms: result.ms,
-      note: result.note || '',
-      slowMs: slowMs
+      note: result.note || ''
     });
     if (state.log.length > 200) state.log.length = 200;
     current.samples = current.samples || [];
-    current.samples.push({ at: current.last.at, state: current.last.state, ms: current.last.ms, slowMs: slowMs });
+    current.samples.push({ at: current.last.at, state: current.last.state, ms: current.last.ms });
     current.samples = normalizeSamples(current.samples);
     save();
   }
@@ -133,6 +131,36 @@ function readBody(monitor, cors) {
     });
   }
   return base;
+}
+
+function probePort(monitor) {
+  var host = '';
+  try { host = new URL(monitor.url).hostname; } catch (e) { host = ''; }
+  if (!host || !monitor.port) {
+    return Promise.resolve({ state: 'down', code: null, ms: null, note: 'closed' });
+  }
+  return fetch('actions/probe-port.php', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ host: host, port: monitor.port })
+  }).then(function (response) {
+    if (!response.ok) return { state: 'down', code: null, ms: null, note: 'no response' };
+    return response.json().then(function (data) {
+      if (!data || (data.state !== 'up' && data.state !== 'down')) {
+        return { state: 'down', code: null, ms: null, note: 'no response' };
+      }
+      var ms = data.ms == null ? null : Number(data.ms);
+      return {
+        state: data.state,
+        code: null,
+        ms: isFinite(ms) ? ms : null,
+        note: data.state === 'down' ? 'closed' : ''
+      };
+    });
+  }, function () {
+    return { state: 'down', code: null, ms: null, note: 'no response' };
+  });
 }
 
 function probe(monitor) {
