@@ -51,27 +51,12 @@ async function runTick(env) {
       RETURNING id
     `;
     if (!locked.length) return;
-    due = await sql`
-    SELECT m.id, m.url, m.kind, m.phrase, m.port, u.region
-    FROM monitors m
-    CROSS JOIN LATERAL unnest(m.regions) AS u(region)
-    WHERE m.paused = FALSE
-      AND u.region IN ('frankfurt', 'capetown', 'singapore', 'sydney')
-      AND NOT EXISTS (
-        SELECT 1
-        FROM check_results c
-        WHERE c.monitor_id = m.id
-          AND c.region = u.region
-          AND c.checked_at > NOW() - (m.interval_ms * INTERVAL '1 millisecond')
-      )
-    ORDER BY (
-      SELECT COALESCE(MAX(c.checked_at), TIMESTAMPTZ 'epoch')
-      FROM check_results c
-      WHERE c.monitor_id = m.id
-        AND c.region = u.region
-    ) ASC
-    LIMIT 80
-  `;
+    try {
+      due = await selectDue(sql, true);
+    } catch (error) {
+      if (!missingExclude(error)) throw error;
+      due = await selectDue(sql, false);
+    }
   } catch (error) {
     if (missingTable(error)) {
       console.error("monitors table is missing. The check schema has not been applied.");
@@ -103,6 +88,36 @@ function openDb(env) {
     max: 1,
     fetch_types: false,
   });
+}
+
+function selectDue(sql, withExclude) {
+  const exclude = withExclude ? sql`m.exclude` : sql`NULL`;
+  return sql`
+    SELECT m.id, m.url, m.kind, m.phrase, m.port, ${exclude} AS exclude, u.region
+    FROM monitors m
+    CROSS JOIN LATERAL unnest(m.regions) AS u(region)
+    WHERE m.paused = FALSE
+      AND u.region IN ('frankfurt', 'capetown', 'singapore', 'sydney')
+      AND NOT EXISTS (
+        SELECT 1
+        FROM check_results c
+        WHERE c.monitor_id = m.id
+          AND c.region = u.region
+          AND c.checked_at > NOW() - (m.interval_ms * INTERVAL '1 millisecond')
+      )
+    ORDER BY (
+      SELECT COALESCE(MAX(c.checked_at), TIMESTAMPTZ 'epoch')
+      FROM check_results c
+      WHERE c.monitor_id = m.id
+        AND c.region = u.region
+    ) ASC
+    LIMIT 80
+  `;
+}
+
+function missingExclude(error) {
+  if (!error || error.code !== "42703") return false;
+  return String(error.message || "").includes("exclude");
 }
 
 function missingTable(error) {
@@ -161,6 +176,7 @@ async function askRegion(env, origin, region, jobs) {
         kind: job.kind,
         phrase: job.phrase || "",
         port: Number(job.port) || 0,
+        exclude: cleanExclude(job.exclude),
       })),
     }),
     signal: AbortSignal.timeout(25000),
@@ -184,6 +200,17 @@ async function askRegion(env, origin, region, jobs) {
     });
   }
   return rows;
+}
+
+function cleanExclude(value) {
+  if (!Array.isArray(value)) return [];
+  const out = [];
+  for (const item of value) {
+    const code = Number(item);
+    if (!Number.isInteger(code) || code < 100 || code > 599) continue;
+    if (!out.includes(code)) out.push(code);
+  }
+  return out;
 }
 
 function cleanState(value) {

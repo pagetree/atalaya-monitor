@@ -1,5 +1,5 @@
 import { INTERVALS, els, state } from './state.js';
-import { $, clock, esc, isQueued, parseUrl, stamp } from './util.js';
+import { $, clock, esc, parseUrl, stamp } from './util.js';
 import { GLOBE, ico } from './icons.js';
 import { sampleTone, toneWord, uptimeText } from './samples.js';
 
@@ -10,17 +10,19 @@ function kindLabel(kind) {
   return 'Website';
 }
 
+var PLACES = { frankfurt: 'Frankfurt', capetown: 'Cape Town', singapore: 'Singapore', sydney: 'Sydney' };
+
 function detailText(item) {
   if (!item) return '';
   var bits = [];
   if (item.code != null) bits.push(String(item.code));
   if (item.ms != null) bits.push(item.ms + ' ms');
+  if (item.region && PLACES[item.region]) bits.push(PLACES[item.region]);
   if (item.note) bits.push(item.note);
   return bits.join(', ');
 }
 
 function statusText(m) {
-  if (isQueued(m.id)) return 'checking';
   if (m.paused && m.last) return toneWord(sampleTone(m.last)) + ', paused';
   if (m.paused) return 'paused';
   if (!m.last) return 'waiting';
@@ -28,7 +30,7 @@ function statusText(m) {
 }
 
 function pipClass(m) {
-  if (isQueued(m.id) || !m.last) return 'pip-muted';
+  if (!m.last) return 'pip-muted';
   var tone = sampleTone(m.last);
   if (tone === 'up') return 'pip-up';
   if (tone === 'down') return 'pip-down';
@@ -38,7 +40,6 @@ function pipClass(m) {
 
 function rank(m) {
   if (m.last && m.last.state === 'down' && !m.paused) return 0;
-  if (isQueued(m.id)) return 1;
   if (!m.last && !m.paused) return 2;
   if (m.paused) return 4;
   return 3;
@@ -70,7 +71,6 @@ function optionsHtml(selected) {
 }
 
 function pillFor(monitor) {
-  if (isQueued(monitor.id)) return { tone: 'wait', word: 'Checking' };
   if (monitor.paused) return { tone: 'wait', word: 'Paused' };
   if (!monitor.last) return { tone: 'wait', word: 'Waiting' };
   var tone = sampleTone(monitor.last);
@@ -81,12 +81,7 @@ function pillFor(monitor) {
 }
 
 export function renderSummary() {
-  var checking = 0;
-  var i;
-  for (i = 0; i < state.monitors.length; i += 1) {
-    if (isQueued(state.monitors[i].id)) checking += 1;
-  }
-  els.logStatus.hidden = checking === 0;
+  if (els.logStatus) els.logStatus.hidden = true;
   els.count.textContent = 'Monitors (' + state.monitors.length + ')';
 }
 
@@ -127,7 +122,6 @@ export function renderRows() {
         html += '<a class="act" href="' + esc(m.url) + '" target="_blank" rel="noopener noreferrer">' + ico('view') + 'View</a>';
         html += '<button type="button" class="act" data-action="edit" data-id="' + esc(m.id) + '">' + ico('edit') + 'Edit</button>';
         if (state.moreId === m.id) {
-          html += '<button type="button" class="act" data-action="check" data-id="' + esc(m.id) + '" id="check-' + esc(m.id) + '">' + ico('check') + 'Check</button>';
           html += '<button type="button" class="act" data-action="pause" data-id="' + esc(m.id) + '" id="pause-' + esc(m.id) + '">' + ico(m.paused ? 'play' : 'pause') + pauseLabel + '</button>';
           html += '<button type="button" class="act" data-action="remove" data-id="' + esc(m.id) + '" id="remove-' + esc(m.id) + '">' + ico('trash') + removeLabel + '</button>';
         } else {

@@ -214,8 +214,18 @@ export function normalizeMonitor(m) {
     notify: m.notify === 'email' ? 'email' : 'email',
     paused: Boolean(m.paused),
     last: normalizeLast(m.last),
-    samples: normalizeSamples(m.samples)
+    samples: normalizeSamples(m.samples),
+    checks: checksFrom(m.checks)
   };
+}
+
+function checksFrom(checks) {
+  if (!checks || typeof checks !== 'object') return null;
+  var total = Number(checks.total);
+  var down = Number(checks.down);
+  if (!isFinite(total) || total < 1) return null;
+  if (!isFinite(down) || down < 0) down = 0;
+  return { total: total, down: down };
 }
 
 export function normalizeLog(entry) {
@@ -234,11 +244,18 @@ export function normalizeLog(entry) {
     state: entry.state,
     code: isFinite(code) ? code : null,
     ms: isFinite(ms) ? ms : null,
-    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : ''
+    note: typeof entry.note === 'string' ? entry.note.slice(0, 80) : '',
+    region: typeof entry.region === 'string' ? entry.region.slice(0, 20) : ''
   };
 }
 
 export function uptimeText(monitor) {
+  if (monitor.checks && monitor.checks.total) {
+    var ok = monitor.checks.total - monitor.checks.down;
+    if (ok < 0) ok = 0;
+    var pct = Math.round((ok / monitor.checks.total) * 1000) / 10;
+    return (pct % 1 === 0 ? String(pct) : pct.toFixed(1)) + '%';
+  }
   var cutoff = Date.now() - (30 * 86400000);
   var samples = monitor.samples || [];
   var kept = [];

@@ -93,7 +93,7 @@
         <input type="checkbox" name="notify" value="email" checked>
         <span class="notify-copy">Email <em><?= htmlspecialchars((string) ($appUser['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?></em></span>
       </label>
-      <p class="foot-note">Saving runs the first check right away.</p>
+      <p class="foot-note">The regions you picked run the check. This page only shows the result.</p>
       <div class="sheet-actions">
         <a class="btn-quiet" href="#monitors">Cancel</a>
         <button type="submit" class="btn-ink">Add monitor</button>

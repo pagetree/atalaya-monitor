@@ -1,8 +1,7 @@
-import { KEY, els, state } from './state.js';
-import { $, cleanInterval, cleanKind, cleanPeriod, cleanPort, hostFrom, parseExclude, parseUrl, portUrl, uid } from './util.js';
-import { load, save, setBanner, setFormError } from './storage.js';
+import { els, state } from './state.js';
+import { $, cleanInterval, cleanKind, cleanPeriod, cleanPort, findMonitor, hostFrom, parseExclude, parseUrl, portUrl } from './util.js';
+import { importLocal, loadBoard, loadPrefs, postMonitor, savePrefs, setBanner, setFormError } from './storage.js';
 import { render, renderRows } from './render.js';
-import { enqueue, findMonitor, tick } from './checks.js';
 
 function closeClear() {
   els.clearAsk.hidden = true;
@@ -17,7 +16,7 @@ function onClick(event) {
 
   if (action === 'period') {
     state.settings.period = cleanPeriod(btn.getAttribute('data-period'));
-    save();
+    savePrefs();
     render();
     return;
   }
@@ -42,14 +41,23 @@ function onClick(event) {
     var edited = findMonitor(id);
     var nameField = $('edit-name-' + id);
     var everyField = $('edit-every-' + id);
-    if (edited && nameField) {
-      var nextName = nameField.value.trim().slice(0, 80);
-      edited.name = nextName || hostFrom(edited.url);
-      if (everyField) edited.interval = cleanInterval(Number(everyField.value));
-    }
-    state.editId = null;
-    save();
-    render();
+    if (!edited || !nameField || state.saving) return;
+    var nextName = nameField.value.trim().slice(0, 80);
+    var nextInterval = everyField ? cleanInterval(Number(everyField.value)) : edited.interval;
+    state.saving = true;
+    postMonitor('update', {
+      id: id,
+      name: nextName || hostFrom(edited.url),
+      interval: nextInterval
+    }).then(function (data) {
+      state.saving = false;
+      if (!data || !data.ok) {
+        setBanner((data && data.error) || 'Could not save that change.');
+        return;
+      }
+      state.editId = null;
+      return loadBoard().then(render);
+    });
     return;
   }
 
@@ -60,29 +68,18 @@ function onClick(event) {
     return;
   }
 
-  if (action === 'check-all') {
-    state.pendingRemove = null;
-    state.monitors.forEach(function (m) {
-      if (!m.paused) enqueue(m.id);
-    });
-    renderRows();
-    return;
-  }
-
-  if (action === 'check') {
-    state.pendingRemove = null;
-    enqueue(id);
-    renderRows();
-    return;
-  }
-
   if (action === 'pause') {
-    var monitor = findMonitor(id);
-    if (!monitor) return;
-    monitor.paused = !monitor.paused;
+    if (!findMonitor(id) || state.saving) return;
     state.pendingRemove = null;
-    save();
-    render();
+    state.saving = true;
+    postMonitor('pause', { id: id }).then(function (data) {
+      state.saving = false;
+      if (!data || !data.ok) {
+        setBanner((data && data.error) || 'Could not save that change.');
+        return;
+      }
+      return loadBoard().then(render);
+    });
     return;
   }
 
@@ -94,10 +91,18 @@ function onClick(event) {
       if (confirmBtn) confirmBtn.focus();
       return;
     }
-    state.monitors = state.monitors.filter(function (m) { return m.id !== id; });
-    state.pendingRemove = null;
-    save();
-    render();
+    if (state.saving) return;
+    state.saving = true;
+    postMonitor('delete', { id: id }).then(function (data) {
+      state.saving = false;
+      state.pendingRemove = null;
+      if (!data || !data.ok) {
+        setBanner((data && data.error) || 'Could not remove that monitor.');
+        render();
+        return;
+      }
+      return loadBoard().then(render);
+    });
     return;
   }
 
@@ -114,17 +119,19 @@ function onClick(event) {
   }
 
   if (action === 'clear-do') {
-    try {
-      localStorage.removeItem(KEY);
-    } catch (e) {}
-    state.monitors = [];
-    state.log = [];
-    state.pendingRemove = null;
-    state.storageBroken = false;
-    els.clearAsk.hidden = true;
-    setBanner('');
-    save();
-    render();
+    if (state.saving) return;
+    state.saving = true;
+    postMonitor('delete-all').then(function (data) {
+      state.saving = false;
+      if (!data || !data.ok) {
+        setBanner((data && data.error) || 'Could not delete the monitors.');
+        return;
+      }
+      state.pendingRemove = null;
+      els.clearAsk.hidden = true;
+      setBanner('');
+      return loadBoard().then(render);
+    });
   }
 }
 
@@ -183,34 +190,36 @@ function onAdd(event) {
       return;
     }
   }
+  if (state.saving) return;
   var name = form.name.value.trim().slice(0, 80);
   var interval = cleanInterval(Number(form.interval.value));
-  state.monitors.push({
-    id: uid(),
-    name: name || hostFrom(url),
+  state.saving = true;
+  postMonitor('create', {
+    name: name,
     url: url,
     kind: kind,
     phrase: kind === 'keyword' ? phrase : '',
     exclude: exclude,
     port: kind === 'port' ? port : 0,
     interval: interval,
-    regions: regions,
-    notify: notifyBox.value,
-    paused: false,
-    last: null,
-    samples: []
+    regions: regions
+  }).then(function (data) {
+    state.saving = false;
+    if (!data || !data.ok) {
+      setFormError((data && data.error) || 'Could not save this monitor.');
+      return;
+    }
+    state.settings.interval = interval;
+    savePrefs();
+    setFormError('');
+    form.name.value = '';
+    form.url.value = '';
+    if (form.phrase) form.phrase.value = '';
+    if (form.exclude) form.exclude.value = '';
+    if (form.port) form.port.value = '';
+    if (location.hash === '#add') location.hash = 'monitors';
+    return loadBoard().then(render);
   });
-  state.settings.interval = interval;
-  setFormError('');
-  form.name.value = '';
-  form.url.value = '';
-  if (form.phrase) form.phrase.value = '';
-  if (form.exclude) form.exclude.value = '';
-  if (form.port) form.port.value = '';
-  save();
-  render();
-  enqueue(state.monitors[state.monitors.length - 1].id);
-  if (location.hash === '#add') location.hash = 'monitors';
 }
 
 function syncView() {
@@ -232,7 +241,7 @@ function syncView() {
     alerts: ['Alerts', 'Notices from your checks.'],
     log: ['Logs', 'Every check on the board.'],
     status: ['Public Status Page', 'What visitors see about these services.'],
-    settings: ['Saved data', 'Monitors and the log for this board.']
+    settings: ['Settings', 'Monitors stored on your account.']
   };
   var copy = titles[page] || titles.main;
   var titleEl = $('dash-title');
@@ -263,7 +272,7 @@ export function init() {
   els.formError = $('form-error');
   els.clearAsk = $('clear-ask');
 
-  load();
+  loadPrefs();
   els.form.interval.value = String(state.settings.interval);
 
   if (!location.hash || location.hash === '#') {
@@ -303,14 +312,6 @@ export function init() {
   });
   els.form.addEventListener('submit', onAdd);
   syncKindFields();
-  els.rows.addEventListener('change', function (event) {
-    var sel = event.target;
-    if (!sel || sel.getAttribute('data-action') !== 'interval') return;
-    var monitor = findMonitor(sel.getAttribute('data-id'));
-    if (!monitor) return;
-    monitor.interval = cleanInterval(Number(sel.value));
-    save();
-  });
 
   document.addEventListener('focusin', function (event) {
     var el = event.target;
@@ -326,6 +327,12 @@ export function init() {
   syncView();
   if (location.hash === '#add' && els.form && els.form.url) els.form.url.focus();
   render();
-  tick();
-  setInterval(tick, 5000);
+  loadBoard().then(function (ok) {
+    render();
+    if (ok) return importLocal().then(render);
+  });
+  setInterval(function () {
+    if (document.hidden || state.editId || state.moreId || state.pendingRemove || state.saving) return;
+    loadBoard().then(render);
+  }, 20000);
 }

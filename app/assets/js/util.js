@@ -1,4 +1,4 @@
-import { INTERVALS, inflight, queue } from './state.js';
+import { INTERVALS, state } from './state.js';
 
 export function $(id) {
   return document.getElementById(id);
@@ -113,8 +113,12 @@ export function cleanRegions(list) {
   return out;
 }
 
-export function isQueued(id) {
-  return inflight.has(id) || queue.indexOf(id) !== -1;
+export function findMonitor(id) {
+  var i;
+  for (i = 0; i < state.monitors.length; i += 1) {
+    if (state.monitors[i].id === id) return state.monitors[i];
+  }
+  return null;
 }
 
 export function ago(ts) {

@@ -13,13 +13,11 @@ export var state = {
   log: [],
   settings: { interval: 300000, period: 24 },
   filter: '',
-  storageBroken: false,
+  saving: false,
   pendingRemove: null,
   editId: null,
   moreId: null,
   returnFocus: null
 };
 
-export var inflight = new Set();
-export var queue = [];
 export var els = {};
