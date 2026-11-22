@@ -1,0 +1,112 @@
+header {
+  padding: 28px 0 8px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px 32px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  color: #141414;
+  text-decoration: none;
+}
+
+.brand:hover,
+.brand:visited {
+  color: #141414;
+}
+
+.pulse {
+  width: 56px;
+  height: auto;
+  display: block;
+  flex: none;
+}
+
+.mark-reveal {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand:hover .mark-reveal,
+.brand:focus-visible .mark-reveal {
+  grid-template-columns: 1fr;
+}
+
+.mark-clip {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.wordmark {
+  display: block;
+  height: 40px;
+  width: auto;
+  margin-left: 8px;
+  transform: translateX(-16px);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand:hover .wordmark,
+.brand:focus-visible .wordmark {
+  transform: translateX(0);
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand h1 {
+  display: flex;
+  align-items: center;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #141414;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 10px 4px;
+  font-size: 1rem;
+}
+
+nav a:visited {
+  color: #141414;
+}
+
+nav a[aria-current="page"] {
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-reveal,
+  .wordmark {
+    transition: none;
+  }
+}
+
+.pipe {
+  color: #141414;
+  padding: 0 14px;

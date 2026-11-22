@@ -1,0 +1,202 @@
+/* Source Sans 3: a humanist face that stays readable in a dense table.
+   Green, amber, and red appear only as status: the card, the pill, the event dot. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #141414;
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+a {
+  color: #0033a0;
+}
+
+a:visited {
+  color: #0033a0;
+}
+
+:focus-visible {
+  outline: 2px solid #0033a0;
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  transform: translateY(-150%);
+  background: #fff;
+  color: #141414;
+  border: 1px solid #141414;
+  padding: 8px 10px;
+  z-index: 2;
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.ico {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ico .fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.lab,
+.with-ico,
+.empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty {
+  color: #3d3d3d;
+}
+
+
+.banner {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  background: #fdecec;
+  color: #9b1b1b;
+  border: 1px solid #9b1b1b;
+}
+
+main {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-top: 12px;
+  padding-bottom: 40px;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  color: #141414;
+  border-radius: 0;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input,
+select {
+  background: #fff;
+  border: 1px solid #5c5c5c;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+input[type="search"] {
+  appearance: none;
+}
+
+::placeholder {
+  color: #3d3d3d;
+  opacity: 1;
+}
+
+button,
+a.act {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid #6b6b6b;
+  border-radius: 5px;
+  background: #fff;
+  color: #141414;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:hover,
+button:active,
+a.act:hover,
+a.act:active {
+  background: #f3f3f3;
+  border-color: #141414;
+  color: #141414;
+}
+
+button.solid,
+.add-form button[type="submit"] {
+  background: #c2410c;
+  border-color: #c2410c;
+  color: #fff;
+}
+
+button.solid:hover,
+button.solid:active,
+.add-form button[type="submit"]:hover,
+.add-form button[type="submit"]:active {
+  background: #b54708;
+  border-color: #b54708;
+  color: #fff;
+}
+
+button[data-action="clear-do"] {
+  background: #b42318;
+  border-color: #b42318;
+  color: #fff;
+}
+
+button[data-action="clear-do"]:hover,
+button[data-action="clear-do"]:active {
+  background: #8f1c14;
+  border-color: #8f1c14;
+  color: #fff;
+}
+
+button[data-action="remove"] {
+  color: #b42318;
+  border-color: #b42318;
+  background: #fff;
+}
+
+button[data-action="remove"]:hover,
+button[data-action="remove"]:active {
+  background: #fdecec;
+  color: #8f1c14;
+  border-color: #8f1c14;
+}
+
+input,
+select,
+button {
+  scroll-margin-bottom: 40vh;
+}

@@ -1,0 +1,315 @@
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px 48px;
+  margin: 28px 0 36px;
+}
+
+.headline {
+  margin: 0;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.lede {
+  margin: 10px 0 0;
+  color: #4a4a4a;
+  font-size: 1.125rem;
+}
+
+.status-card {
+  border: 1px solid #cfcfcf;
+  background: #f7f7f7;
+  padding: 16px 18px;
+  min-width: 18rem;
+  border-radius: 6px;
+}
+
+.status-card.card-up {
+  background: #eef8ee;
+  border-color: #b7dfb4;
+}
+
+.status-card.card-slow {
+  background: #fff8e1;
+  border-color: #ead48a;
+}
+
+.status-card.card-down {
+  background: #fdecec;
+  border-color: #f0b4b4;
+}
+
+.status-line {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-sub {
+  margin: 8px 0 0;
+  color: #3d3d3d;
+}
+
+.card-up .status-line {
+  color: #0b5d24;
+}
+
+.card-slow .status-line {
+  color: #9a3412;
+}
+
+.card-down .status-line {
+  color: #9b1b1b;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3d3d3d;
+  display: inline-block;
+  flex: none;
+}
+
+.card-up .dot {
+  background: #0b5d24;
+}
+
+.card-slow .dot {
+  background: #c2410c;
+}
+
+.card-down .dot {
+  background: #9b1b1b;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 14px;
+}
+
+.section-head h3,
+.col h3,
+.add-title,
+.bar h2,
+.drawer-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.add-link,
+.more-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-link {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+
+.filter-row label {
+  font-weight: 700;
+}
+
+.filter-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 18rem;
+}
+
+.qa a:hover,
+.more-link a:hover {
+  color: #141414;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.35fr 0.95fr 1fr;
+  gap: 0;
+  margin-top: 40px;
+  align-items: stretch;
+}
+
+.col {
+  padding: 8px 28px 12px 0;
+}
+
+.col + .col {
+  border-left: 1px solid #d0d0d0;
+  padding-left: 24px;
+}
+
+.about {
+  background: #f3f3f3;
+  border: 0;
+  margin-left: 12px;
+  padding: 20px 22px;
+}
+
+.about hr {
+  border: 0;
+  border-top: 1px solid #d5d5d5;
+  margin: 14px 0;
+}
+
+.heart span {
+  color: #e23b3b;
+  margin-right: 4px;
+}
+
+.qa {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.qa li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.qa svg {
+  width: 16px;
+  height: 16px;
+  color: #595959;
+  flex: none;
+}
+
+.qa a,
+.more-link a {
+  color: #1a4fd8;
+  text-decoration: underline;
+}
+
+.more-link {
+  margin: 12px 0 0;
+}
+
+.about p,
+.col p {
+  margin: 12px 0 0;
+}
+
+.sign {
+  color: #3d3d3d;
+}
+
+.events {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.events li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.event-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.event-time {
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.events .dot.tone-up {
+  background: #0b5d24;
+}
+
+.events .dot.tone-slow {
+  background: #c2410c;
+}
+
+.events .dot.tone-down {
+  background: #9b1b1b;
+}
+
+.events .dot.tone-wait {
+  background: #3d3d3d;
+}
+
+.form-error,
+.hint,
+.add-form .form-error,
+.add-form .hint {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.form-error {
+  color: #9b1b1b;
+  font-weight: 700;
+}
+
+.hint,
+footer {
+  color: #3d3d3d;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin: 24px 0 20px;
+}
+
+#view-settings > p {
+  margin: 0 0 18px;
+  max-width: 48rem;
+}
+
+#clear-ask:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-top: 8px;
+}
+
+#clear-ask p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+footer {
+  margin-top: 20px;
+  padding: 0 0 16px;
+}
+
+footer p {
+  margin: 0;
+}

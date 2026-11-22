@@ -1,0 +1,17 @@
+.env
+**/.env
+.env.*
+**/.env.*
+!.env.example
+!**/.env.example
+
+*.sql
+
+.wrangler/
+vendor/
+node_modules/
+
+.DS_Store
+Thumbs.db
+
+assets/img/insp/*.pdf

@@ -1,0 +1,135 @@
+@media (max-width: 860px) {
+  .top,
+  .hero,
+  .section-head,
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    gap: 4px 0;
+  }
+
+  nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .headline {
+    font-size: 1.8rem;
+  }
+
+  .status-card {
+    min-width: 0;
+  }
+
+  .filter-row input,
+  input,
+  select,
+  button,
+  a.act {
+    min-height: 44px;
+    height: auto;
+    font-size: 1rem;
+  }
+
+  .filter-row input {
+    max-width: none;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .col,
+  .col + .col,
+  .about {
+    border-left: 0;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  .about {
+    padding: 16px;
+  }
+
+  .sheet,
+  .sheet tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .sheet thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .sheet tr {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid #767676;
+  }
+
+  .sheet td {
+    display: block;
+    border: 0;
+    padding: 3px 0;
+    white-space: normal;
+  }
+
+  .sheet td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-weight: 700;
+  }
+
+  .sheet td select {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  button.more {
+    width: 44px;
+  }
+
+  .drawer {
+    width: 100%;
+  }
+
+  .drawer-head,
+  .add-form {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .every-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #clear-ask:not([hidden]) {
+    align-items: stretch;
+  }
+
+  #clear-ask .solid,
+  #clear-ask .plain {
+    flex: 1 1 8rem;
+  }
+}
