@@ -1,10 +1,6 @@
 <section id="view-add" hidden>
   <form id="add-form" class="sheet-card" novalidate>
     <section class="add-block add-identity">
-      <div class="add-block-head">
-        <h2>What to watch</h2>
-        <p>The address we request, and the name on the board.</p>
-      </div>
       <div class="identity-grid">
         <label class="identity-address">
           <span class="lab">Address</span>
@@ -23,7 +19,7 @@
         <p>This is the Type column on the board. It also decides what counts as up.</p>
       </div>
       <fieldset class="every" aria-label="Monitor type">
-        <div class="kind-grid">
+        <div class="kind-list">
           <label class="every-opt kind-opt">
             <input type="radio" name="kind" value="website" checked>
             <span class="every-main">Website</span>
@@ -62,7 +58,7 @@
         <p>How many times a day we request this address.</p>
       </div>
       <fieldset class="every" aria-label="Check every">
-        <div class="every-grid cadence-grid">
+        <div class="cadence-rail">
           <label class="every-opt"><input type="radio" name="interval" value="60000"><span class="every-main">1 min</span><span class="every-sub">1,440 a day</span></label>
           <label class="every-opt"><input type="radio" name="interval" value="300000" checked><span class="every-main">5 min</span><span class="every-sub">288 a day</span></label>
           <label class="every-opt"><input type="radio" name="interval" value="900000"><span class="every-main">15 min</span><span class="every-sub">96 a day</span></label>
@@ -72,36 +68,28 @@
       </fieldset>
     </section>
 
-    <section class="add-block">
+    <section class="add-block add-places">
       <div class="add-block-head">
         <h2>Where to check</h2>
         <p>Pick one or more regions. A reply in one place can still fail in another.</p>
       </div>
       <fieldset class="every" aria-label="Regions">
-        <div class="every-grid region-grid">
-          <label class="every-opt"><input type="checkbox" name="region" value="frankfurt" checked><span class="every-main">Frankfurt</span><span class="every-sub">Europe</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="capetown" checked><span class="every-main">Cape Town</span><span class="every-sub">Africa</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="singapore" checked><span class="every-main">Singapore</span><span class="every-sub">Asia</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="sydney" checked><span class="every-main">Sydney</span><span class="every-sub">Oceania</span></label>
-        </div>
-      </fieldset>
-    </section>
-
-    <section class="add-block add-notify">
-      <div class="add-block-head">
-        <h2>How to notify</h2>
-        <p>Where we send a note when a check goes down. Email is the only path for now.</p>
-      </div>
-      <fieldset class="every" aria-label="On an incident">
-        <div class="every-grid notify-grid">
-          <label class="every-opt"><input type="checkbox" name="notify" value="email" checked><span class="every-main">Email</span><span class="every-sub"><?= htmlspecialchars((string) ($appUser['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span></label>
+        <div class="region-grid">
+          <label class="every-opt"><input type="checkbox" name="region" value="frankfurt" checked><span class="every-sub">Europe</span><span class="every-main">Frankfurt</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="capetown" checked><span class="every-sub">Africa</span><span class="every-main">Cape Town</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="singapore" checked><span class="every-sub">Asia</span><span class="every-main">Singapore</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="sydney" checked><span class="every-sub">Oceania</span><span class="every-main">Sydney</span></label>
         </div>
       </fieldset>
     </section>
 
     <p id="form-error" class="form-error" role="alert" hidden></p>
     <div class="sheet-foot">
-      <p>Saving runs the first check right away.</p>
+      <label class="notify-line">
+        <input type="checkbox" name="notify" value="email" checked>
+        <span class="notify-copy">Email <em><?= htmlspecialchars((string) ($appUser['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?></em></span>
+      </label>
+      <p class="foot-note">Saving runs the first check right away.</p>
       <div class="sheet-actions">
         <a class="btn-quiet" href="#monitors">Cancel</a>
         <button type="submit" class="btn-ink">Add monitor</button>
