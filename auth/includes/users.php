@@ -68,6 +68,8 @@ function auth_profile_blank(): array
         'preferred_name' => '',
         'username' => '',
         'job_role' => '',
+        'country' => '',
+        'found_via' => '',
         'phone' => '',
         'website' => '',
         'timezone' => '',
@@ -94,7 +96,7 @@ function auth_profile_from_row(array $row, bool $details): array
         return $profile;
     }
 
-    foreach (['preferred_name', 'username', 'job_role', 'phone', 'website', 'timezone', 'week_start', 'language_code', 'time_format'] as $key) {
+    foreach (['preferred_name', 'username', 'job_role', 'country', 'found_via', 'phone', 'website', 'timezone', 'week_start', 'language_code', 'time_format'] as $key) {
         $value = trim((string) ($row[$key] ?? ''));
         if ($value !== '') {
             $profile[$key] = $value;
@@ -106,21 +108,29 @@ function auth_profile_from_row(array $row, bool $details): array
 
 function auth_load_profile(string $userId): array
 {
-    $full = 'SELECT given_name, family_name, preferred_name, username, job_role, phone, website, timezone, week_start, language_code, time_format, email_verified_at
-             FROM users
-             WHERE id = :id
-             LIMIT 1';
-    try {
-        $stmt = auth_db()->prepare($full);
-        $stmt->execute(['id' => $userId]);
-        $row = $stmt->fetch();
-        if ($row === false) {
-            return auth_profile_blank();
-        }
-        return auth_profile_from_row($row, true);
-    } catch (PDOException $e) {
-        if ((string) $e->getCode() !== '42703') {
-            throw $e;
+    $queries = [
+        'SELECT given_name, family_name, preferred_name, username, job_role, country, found_via, phone, website, timezone, week_start, language_code, time_format, email_verified_at
+         FROM users
+         WHERE id = :id
+         LIMIT 1',
+        'SELECT given_name, family_name, preferred_name, username, job_role, phone, website, timezone, week_start, language_code, time_format, email_verified_at
+         FROM users
+         WHERE id = :id
+         LIMIT 1',
+    ];
+    foreach ($queries as $full) {
+        try {
+            $stmt = auth_db()->prepare($full);
+            $stmt->execute(['id' => $userId]);
+            $row = $stmt->fetch();
+            if ($row === false) {
+                return auth_profile_blank();
+            }
+            return auth_profile_from_row($row, true);
+        } catch (PDOException $e) {
+            if ((string) $e->getCode() !== '42703') {
+                throw $e;
+            }
         }
     }
 
@@ -188,8 +198,8 @@ function auth_save_profile(string $userId, array $profile, bool $withDetails): v
          SET given_name = :given_name,
              family_name = :family_name,
              preferred_name = :preferred_name,
-             username = :username,
-             job_role = :job_role,
+             country = :country,
+             found_via = :found_via,
              phone = :phone,
              website = :website,
              timezone = :timezone,
@@ -206,8 +216,8 @@ function auth_save_profile(string $userId, array $profile, bool $withDetails): v
         'given_name' => $profile['given_name'],
         'family_name' => $optional($profile['family_name']),
         'preferred_name' => $optional($profile['preferred_name']),
-        'username' => $optional($profile['username']),
-        'job_role' => $optional($profile['job_role']),
+        'country' => $optional($profile['country'] ?? ''),
+        'found_via' => $optional($profile['found_via'] ?? ''),
         'phone' => $optional($profile['phone']),
         'website' => $optional($profile['website']),
         'timezone' => $optional($profile['timezone']),

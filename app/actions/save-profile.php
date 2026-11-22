@@ -13,13 +13,14 @@ if ($user === null) {
     auth_redirect('/auth/');
 }
 
-$roles = ['founder', 'developer', 'operations', 'support'];
+$countries = require dirname(__DIR__) . '/includes/countries.php';
+$found = ['friend', 'search', 'social', 'article', 'other'];
 $draft = [
     'given_name' => trim((string) ($_POST['given_name'] ?? '')),
     'family_name' => trim((string) ($_POST['family_name'] ?? '')),
     'preferred_name' => trim((string) ($_POST['preferred_name'] ?? '')),
-    'username' => strtolower(trim((string) ($_POST['username'] ?? ''))),
-    'job_role' => (string) ($_POST['job_role'] ?? ''),
+    'country' => strtoupper(trim((string) ($_POST['country'] ?? ''))),
+    'found_via' => (string) ($_POST['found_via'] ?? ''),
     'phone' => trim((string) ($_POST['phone'] ?? '')),
     'website' => trim((string) ($_POST['website'] ?? '')),
     'timezone' => (string) ($_POST['timezone'] ?? ''),
@@ -38,14 +39,12 @@ if (($draft['given_name'] !== '' && $given === '') || ($draft['family_name'] !==
     auth_redirect('/app/settings.php?tab=profile');
 }
 
-if ($draft['username'] !== '' && preg_match('/^[a-z0-9_]{3,32}$/', $draft['username']) !== 1) {
-    $_SESSION['profile_draft'] = $draft;
-    auth_flash_set('error', 'Username must be 3 to 32 characters: letters, numbers, and underscores.');
-    auth_redirect('/app/settings.php?tab=profile');
+if ($draft['country'] !== '' && !isset($countries[$draft['country']])) {
+    $draft['country'] = '';
 }
 
-if (!in_array($draft['job_role'], $roles, true)) {
-    $draft['job_role'] = '';
+if (!in_array($draft['found_via'], $found, true)) {
+    $draft['found_via'] = '';
 }
 
 if ($draft['phone'] !== '' && preg_match('/^[0-9+().\s-]{6,32}$/', $draft['phone']) !== 1) {
@@ -87,8 +86,8 @@ $profile = [
     'given_name' => $given,
     'family_name' => $family,
     'preferred_name' => $preferred,
-    'username' => $draft['username'],
-    'job_role' => $draft['job_role'],
+    'country' => $draft['country'],
+    'found_via' => $draft['found_via'],
     'phone' => $draft['phone'],
     'website' => $draft['website'],
     'timezone' => $draft['timezone'],
@@ -98,12 +97,6 @@ $profile = [
 ];
 
 try {
-    if (!empty($current['details']) && $profile['username'] !== '' && auth_username_taken($profile['username'], $user['id'])) {
-        $_SESSION['profile_draft'] = $draft;
-        auth_flash_set('error', 'That username is already used.');
-        auth_redirect('/app/settings.php?tab=profile');
-    }
-
     auth_save_profile($user['id'], $profile, !empty($current['details']));
     unset($_SESSION['profile_draft']);
     auth_flash_set('notice', 'Profile saved.');

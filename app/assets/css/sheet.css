@@ -81,16 +81,27 @@ form .sheet-block {
 .field-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px 28px;
+  column-gap: 28px;
+  row-gap: 6px;
   margin-top: 22px;
 }
 
 .sheet-card .field {
   display: grid;
-  gap: 8px;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  align-items: center;
   min-width: 0;
+  margin: 0;
   font-weight: 600;
   font-size: 0.92rem;
+}
+
+.sheet-card .field > input,
+.sheet-card .field > select,
+.sheet-card .field > .email-row,
+.sheet-card .field > .with-prefix {
+  align-self: start;
 }
 
 .sheet-card input:not([type="file"]),
@@ -103,11 +114,12 @@ form .sheet-block {
   height: 44px;
   min-height: 44px;
   max-height: 44px;
+  margin: 0;
   border: 1px solid #d7d7dc;
   border-radius: 8px;
   background: #fff;
   padding: 0 12px;
-  line-height: 44px;
+  line-height: 42px;
 }
 
 .sheet-card select {
@@ -126,7 +138,10 @@ form .sheet-block {
 .label-row {
   display: inline-flex;
   align-items: center;
+  align-self: end;
   gap: 6px;
+  min-height: 24px;
+  line-height: 1.3;
 }
 
 .hint-mark {
@@ -179,9 +194,11 @@ form .sheet-block {
 }
 
 .field-note {
+  align-self: start;
   color: #3d3d3d;
   font-size: 0.9rem;
   font-weight: 400;
+  line-height: 1.35;
 }
 
 .verified {

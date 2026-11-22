@@ -1,11 +1,13 @@
 <?php
 
-$roles = [
-    '' => 'Choose a role',
-    'founder' => 'Founder',
-    'developer' => 'Developer',
-    'operations' => 'Operations',
-    'support' => 'Support',
+$countries = require __DIR__ . '/countries.php';
+$found = [
+    '' => 'Choose one',
+    'friend' => 'A friend or colleague',
+    'search' => 'Search',
+    'social' => 'Social',
+    'article' => 'An article or post',
+    'other' => 'Somewhere else',
 ];
 $weeks = [
     'monday' => 'Monday',
@@ -83,11 +85,11 @@ $verified = !empty($appProfile['email_verified_at']);
       <p class="sheet-sub">Keep the contact and identity fields current.</p>
       <div class="field-grid">
         <label class="field">
-          First name
+          <span class="label-row">First name</span>
           <input type="text" name="given_name" maxlength="80" autocomplete="given-name" value="<?= $esc($val('given_name')) ?>">
         </label>
         <label class="field">
-          Last name
+          <span class="label-row">Last name</span>
           <input type="text" name="family_name" maxlength="80" autocomplete="family-name" placeholder="Optional" value="<?= $esc($val('family_name')) ?>">
         </label>
         <label class="field">
@@ -103,27 +105,29 @@ $verified = !empty($appProfile['email_verified_at']);
           <input type="text" name="preferred_name" maxlength="80" autocomplete="nickname" placeholder="Optional" value="<?= $esc($val('preferred_name')) ?>">
         </label>
         <label class="field">
-          <span class="label-row">Username <abbr class="hint-mark" title="A handle for this account. Letters, numbers, and underscores.">i</abbr></span>
-          <span class="with-prefix">
-            <span aria-hidden="true">@</span>
-            <input type="text" name="username" maxlength="32" autocapitalize="none" spellcheck="false" value="<?= $esc($val('username')) ?>">
-          </span>
-        </label>
-        <label class="field">
-          Role
-          <select name="job_role">
-            <?php foreach ($roles as $roleKey => $roleLabel): ?>
-              <option value="<?= $esc($roleKey) ?>"<?= $val('job_role') === $roleKey ? ' selected' : '' ?>><?= $esc($roleLabel) ?></option>
+          <span class="label-row">Country</span>
+          <select name="country" autocomplete="country">
+            <option value="">Choose a country</option>
+            <?php foreach ($countries as $code => $countryName): ?>
+              <option value="<?= $esc($code) ?>"<?= $val('country') === $code ? ' selected' : '' ?>><?= $esc($countryName) ?></option>
             <?php endforeach; ?>
           </select>
         </label>
         <label class="field">
-          Phone number
+          <span class="label-row">How did you find Atalaya?</span>
+          <select name="found_via">
+            <?php foreach ($found as $foundKey => $foundLabel): ?>
+              <option value="<?= $esc($foundKey) ?>"<?= $val('found_via') === $foundKey ? ' selected' : '' ?>><?= $esc($foundLabel) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label-row">Phone number</span>
           <input type="tel" name="phone" maxlength="32" autocomplete="tel" placeholder="Phone number" value="<?= $esc($val('phone')) ?>">
           <span class="field-note">Optional. Sign in does not use this number.</span>
         </label>
         <label class="field">
-          Website
+          <span class="label-row">Website</span>
           <input type="url" name="website" maxlength="200" inputmode="url" placeholder="https://" value="<?= $esc($val('website')) ?>">
         </label>
       </div>
@@ -155,13 +159,13 @@ $verified = !empty($appProfile['email_verified_at']);
           </select>
         </label>
         <label class="field">
-          Language
+          <span class="label-row">Language</span>
           <select name="language_code">
             <option value="en" selected>English</option>
           </select>
         </label>
         <label class="field">
-          Time format
+          <span class="label-row">Time format</span>
           <select name="time_format">
             <?php foreach ($hours as $hourKey => $hourLabel): ?>
               <option value="<?= $esc($hourKey) ?>"<?= $val('time_format') === $hourKey ? ' selected' : '' ?>><?= $esc($hourLabel) ?></option>
