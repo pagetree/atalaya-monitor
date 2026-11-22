@@ -125,7 +125,7 @@ function auth_code_message(string $toEmail, string $code, int $minutes, string $
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:22px;border-collapse:collapse;background-color:#f6f6f4;border:1px solid #e4e4e1;">'
         . '<tr><td align="center" style="padding:22px 16px;font-family:Consolas,\'Courier New\',monospace;font-size:32px;line-height:1.2;font-weight:700;letter-spacing:6px;color:#141414;">' . $safeCode . '</td></tr>'
         . '</table>'
-        . '<p style="margin:10px 0 0;font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#5c5c5c;">Nine digits. No spaces.</p>'
+        . '<p style="margin:10px 0 0;font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#5c5c5c;">Six digits. No spaces.</p>'
         . '<p style="margin:22px 0 0;padding-top:18px;border-top:1px solid #e4e4e1;font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#5c5c5c;">If you did not ask to sign in, you can ignore this email. Nothing changes on your account, and the code stops working when the time is up.</p>'
         . '</td></tr>'
         . '<tr><td style="padding:8px 36px 28px;font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#6b6b6b;">'
@@ -139,7 +139,7 @@ function auth_code_message(string $toEmail, string $code, int $minutes, string $
     $text = "Enter this code\n\n"
         . $code . "\n\n"
         . "Use it on the Atalaya sign in screen. It is valid for {$window}.\n"
-        . "Nine digits. No spaces.\n\n"
+        . "Six digits. No spaces.\n\n"
         . "If you did not ask to sign in, you can ignore this email. Nothing changes on your account, and the code stops working when the time is up.\n\n"
         . "Atalaya\n"
         . "Free status monitor for a site or an API.\n"

@@ -194,12 +194,12 @@ input[type="text"] {
 }
 
 .code-shell {
-  width: min(100% - 32px, 760px);
+  width: min(100% - 32px, 560px);
 }
 
 .digits {
   display: grid;
-  grid-template-columns: repeat(9, 68px);
+  grid-template-columns: repeat(6, 68px);
   gap: 10px;
 }
 
@@ -218,9 +218,17 @@ input[type="text"] {
   text-align: center;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 520px) {
   .digits {
-    grid-template-columns: repeat(3, 68px);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .digits input {
+    width: 100%;
+    height: 56px;
+    min-height: 56px;
+    font-size: 1.45rem;
   }
 }
 

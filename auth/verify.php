@@ -25,7 +25,7 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Enter your code · Atalaya</title>
-  <meta name="description" content="Enter the 9 digit verification code sent to your email.">
+  <meta name="description" content="Enter the 6 digit verification code sent to your email.">
   <link rel="icon" href="../assets/img/logo-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="assets/css/auth.css">
@@ -45,7 +45,7 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
 
   <main id="content" class="shell code-shell" tabindex="-1">
     <section class="panel" aria-labelledby="verify-title">
-      <h1 id="verify-title">Enter the 9 digit code</h1>
+      <h1 id="verify-title">Enter the 6 digit code</h1>
       <p class="lede">We sent a code to <?= htmlspecialchars($masked, ENT_QUOTES, 'UTF-8') ?>. It stays valid for 30 minutes.</p>
 
       <?php if ($error !== null): ?>
@@ -56,8 +56,8 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
         <fieldset class="digits-set">
           <legend>Verification code</legend>
           <div class="digits">
-            <?php for ($i = 1; $i <= 9; $i++): ?>
-              <input type="text" name="code[]" inputmode="numeric" pattern="[0-9]" maxlength="1" required autocomplete="<?= $i === 1 ? 'one-time-code' : 'off' ?>" aria-label="Digit <?= $i ?> of 9"<?= $i === 1 ? ' autofocus' : '' ?>>
+            <?php for ($i = 1; $i <= 6; $i++): ?>
+              <input type="text" name="code[]" inputmode="numeric" pattern="[0-9]" maxlength="1" required autocomplete="<?= $i === 1 ? 'one-time-code' : 'off' ?>" aria-label="Digit <?= $i ?> of 6"<?= $i === 1 ? ' autofocus' : '' ?>>
             <?php endfor; ?>
           </div>
         </fieldset>

@@ -39,7 +39,7 @@ $notice = auth_flash_get('notice');
   <main id="content" class="shell" tabindex="-1">
     <section class="panel" aria-labelledby="auth-title">
       <h1 id="auth-title">Your email</h1>
-      <p class="lede">If the email is new, we create the account. Then we email a 9 digit code.</p>
+      <p class="lede">If the email is new, we create the account. Then we email a 6 digit code.</p>
 
       <?php if ($error !== null): ?>
         <p class="banner" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>

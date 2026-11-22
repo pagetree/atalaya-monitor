@@ -20,8 +20,8 @@ if (is_array($raw)) {
 }
 $code = preg_replace('/\D+/', '', (string) $raw) ?? '';
 
-if (strlen($code) !== 9) {
-    auth_flash_set('error', 'Enter the 9 digit code from your email.');
+if (strlen($code) !== 6) {
+    auth_flash_set('error', 'Enter the 6 digit code from your email.');
     auth_redirect('/auth/verify.php');
 }
 

@@ -7,7 +7,7 @@ require_once __DIR__ . '/config.php';
 
 function auth_generate_code(): string
 {
-    return str_pad((string) random_int(0, 999999999), 9, '0', STR_PAD_LEFT);
+    return str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 }
 
 function auth_hash_code(string $code): string
@@ -60,7 +60,7 @@ function auth_create_login_code(string $userId): string
 function auth_consume_login_code(string $userId, string $code): bool
 {
     $code = preg_replace('/\D+/', '', $code) ?? '';
-    if (strlen($code) !== 9) {
+    if (strlen($code) !== 6) {
         return false;
     }
 
