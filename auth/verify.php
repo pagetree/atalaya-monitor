@@ -57,11 +57,15 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
         <p class="banner ok" role="status"><?= htmlspecialchars($notice, ENT_QUOTES, 'UTF-8') ?></p>
       <?php endif; ?>
 
-      <form class="stack" method="post" action="actions/confirm.php" autocomplete="one-time-code">
-        <label>
-          Verification code
-          <input class="code" type="text" name="code" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" minlength="9" required autofocus placeholder="123456789" autocomplete="one-time-code">
-        </label>
+      <form class="stack" method="post" action="actions/confirm.php">
+        <fieldset class="digits-set">
+          <legend>Verification code</legend>
+          <div class="digits">
+            <?php for ($i = 1; $i <= 9; $i++): ?>
+              <input type="text" name="code[]" inputmode="numeric" pattern="[0-9]" maxlength="1" required autocomplete="<?= $i === 1 ? 'one-time-code' : 'off' ?>" aria-label="Digit <?= $i ?> of 9"<?= $i === 1 ? ' autofocus' : '' ?>>
+            <?php endfor; ?>
+          </div>
+        </fieldset>
         <button class="solid" type="submit">Verify and open the board</button>
       </form>
 

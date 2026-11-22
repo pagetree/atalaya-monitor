@@ -196,11 +196,51 @@ input[type="text"] {
   font: inherit;
 }
 
-input[type="text"].code {
-  letter-spacing: 0.28em;
+.digits-set {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.digits-set legend {
+  margin: 0 0 8px;
+  padding: 0;
+  font-weight: 700;
+}
+
+.digits {
+  display: grid;
+  grid-template-columns: repeat(9, 48px);
+  gap: 8px;
+}
+
+.digits input {
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 1px solid #141414;
+  border-radius: 5px;
+  background: #fff;
+  color: #141414;
+  font: inherit;
   font-size: 1.25rem;
   font-weight: 700;
   text-align: center;
+}
+
+@media (max-width: 540px) {
+  .digits {
+    grid-template-columns: repeat(3, 52px);
+    gap: 10px;
+  }
+
+  .digits input {
+    width: 52px;
+    height: 52px;
+    min-height: 52px;
+  }
 }
 
 .hint {

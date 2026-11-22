@@ -14,8 +14,11 @@ if ($pending === null) {
     auth_redirect('/auth/');
 }
 
-$code = (string) ($_POST['code'] ?? '');
-$code = preg_replace('/\D+/', '', $code) ?? '';
+$raw = $_POST['code'] ?? '';
+if (is_array($raw)) {
+    $raw = implode('', $raw);
+}
+$code = preg_replace('/\D+/', '', (string) $raw) ?? '';
 
 if (strlen($code) !== 9) {
     auth_flash_set('error', 'Enter the 9 digit code from your email.');
