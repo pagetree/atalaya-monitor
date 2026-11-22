@@ -173,7 +173,7 @@ $verified = !empty($appProfile['email_verified_at']);
     </div>
 
     <div class="sheet-foot">
-      <p><a href="index.php">Open the board</a>. Save to keep this profile on the account.</p>
+      <p>Save to keep this profile on the account.</p>
       <div class="sheet-actions">
         <button class="btn-quiet" type="reset">Reset</button>
         <button class="btn-ink" type="submit">Save changes</button>

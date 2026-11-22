@@ -1,18 +1,21 @@
 /* One sheet for account pages. The shadow marks that single surface.
    Black is the commit action. Red is only the picture delete. Green is only Verified. */
 
+body.account {
+  background: #f4f4f5;
+}
+
 .sheet-card {
-  max-width: 920px;
-  margin-top: 22px;
+  width: 100%;
   background: #fff;
-  border: 1px solid #e4e4e4;
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.06);
+  border: 1px solid #e6e6e8;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.05);
   overflow: hidden;
 }
 
 .sheet-block {
-  padding: 22px 22px 20px;
+  padding: 28px 28px 26px;
 }
 
 .sheet-block + .sheet-block,
@@ -43,20 +46,20 @@ form .sheet-block {
 
 .portrait {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
 }
 
 .portrait-face {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: #141414;
   color: #fff;
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   overflow: hidden;
   flex: none;
 }
@@ -77,25 +80,37 @@ form .sheet-block {
 
 .field-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 22px;
-  margin-top: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px 28px;
+  margin-top: 22px;
 }
 
 .sheet-card .field {
   display: grid;
-  gap: 6px;
+  gap: 8px;
+  min-width: 0;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .sheet-card input,
 .sheet-card select {
-  min-height: 44px;
-  border: 1px solid #cfcfcf;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 42px;
+  border: 1px solid #d7d7dc;
   border-radius: 8px;
   background: #fff;
   padding: 0 12px;
+}
+
+.sheet-card select {
+  appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233d3d3d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.5 8 10.5 12 6.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
 }
 
 .sheet-card input[readonly] {
@@ -141,10 +156,14 @@ form .sheet-block {
 
 .email-row input,
 .with-prefix input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
   border: 0;
   background: transparent;
-  min-height: 42px;
+  min-height: 40px;
   border-radius: 8px;
+  box-shadow: none;
 }
 
 .with-prefix span {
@@ -173,9 +192,9 @@ form .sheet-block {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding: 14px 22px;
-  background: #f6f6f6;
+  gap: 20px;
+  padding: 16px 28px;
+  background: #f7f7f8;
   border-top: 1px solid #ececec;
 }
 
@@ -193,11 +212,11 @@ form .sheet-block {
 .sheet-card .btn-ink,
 .sheet-card .btn-quiet,
 .sheet-card .btn-danger {
-  min-height: 44px;
-  height: auto;
+  min-height: 36px;
+  height: 36px;
   border-radius: 8px;
   padding: 0 14px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .sheet-card .btn-ink,
@@ -228,11 +247,12 @@ form .sheet-block {
 }
 
 .sheet-card .btn-danger {
-  width: 44px;
+  width: 36px;
+  min-height: 36px;
   padding: 0;
-  background: #fff;
-  border-color: #e7b4b4;
-  color: #9b1b1b;
+  background: transparent;
+  border-color: transparent;
+  color: #c81e1e;
 }
 
 .sheet-card .btn-danger:hover,
@@ -272,8 +292,8 @@ form .sheet-block {
   .sheet-block,
   .sheet-foot,
   .sheet-wait {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .sheet-foot {
