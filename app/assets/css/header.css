@@ -1,16 +1,17 @@
 header.dash {
   width: 100%;
   max-width: 1440px;
-  margin: 0 auto;
-  padding: 28px 24px 0;
+  margin: 0 auto 48px;
+  padding: 36px 24px 0;
 }
 
 .dash-brand {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px 24px;
+  gap: 16px 32px;
   flex-wrap: wrap;
+  margin-bottom: 40px;
 }
 
 .account-links {
@@ -86,7 +87,7 @@ header.dash {
 }
 
 .page-head h1 {
-  margin: 22px 0 0;
+  margin: 0;
   font-size: clamp(1.5rem, 2.4vw, 1.85rem);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -94,7 +95,7 @@ header.dash {
 }
 
 .page-lede {
-  margin: 6px 0 0;
+  margin: 14px 0 0;
   max-width: 40rem;
   color: #3d3d3d;
   font-size: 1.05rem;
@@ -104,8 +105,8 @@ header.dash {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 2px 6px;
-  margin-top: 16px;
+  gap: 4px 10px;
+  margin-top: 32px;
   border-bottom: 1px solid #d9d9d9;
 }
 

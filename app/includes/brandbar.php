@@ -12,8 +12,9 @@ $onAccount = !empty($onAccount);
       </span>
     </span>
   </a>
-  <div class="account-links">
-    <a href="settings.php"<?= $onAccount ? ' aria-current="page"' : '' ?>>Account</a>
+  <nav class="account-links" aria-label="Main">
+    <a href="index.php"<?= $onAccount ? '' : ' aria-current="page"' ?>>App</a>
+    <a href="settings.php"<?= $onAccount ? ' aria-current="page"' : '' ?>>Settings</a>
     <a href="../auth/logout.php">Log out</a>
-  </div>
+  </nav>
 </div>
