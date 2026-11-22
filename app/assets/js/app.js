@@ -137,6 +137,19 @@ function onAdd(event) {
     form.url.focus();
     return;
   }
+  var regionBoxes = form.querySelectorAll('input[name="region"]:checked');
+  if (!regionBoxes.length) {
+    setFormError('Pick at least one region.');
+    return;
+  }
+  var notifyBox = form.querySelector('input[name="notify"]:checked');
+  if (!notifyBox) {
+    setFormError('Choose email so we can tell you about an incident.');
+    return;
+  }
+  var regions = [];
+  var r;
+  for (r = 0; r < regionBoxes.length; r += 1) regions.push(regionBoxes[r].value);
   var name = form.name.value.trim().slice(0, 80);
   var interval = cleanInterval(Number(form.interval.value));
   state.monitors.push({
@@ -144,6 +157,8 @@ function onAdd(event) {
     name: name || hostFrom(url),
     url: url,
     interval: interval,
+    regions: regions,
+    notify: notifyBox.value,
     paused: false,
     last: null,
     samples: []

@@ -1,35 +1,57 @@
 #view-add .sheet-card {
-  max-width: 760px;
+  width: 100%;
+  max-width: none;
 }
 
-.add-form {
+.add-section {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 28px 48px;
+  align-items: start;
+  padding: 32px;
+  border-bottom: 1px solid #ececec;
+}
+
+.add-copy h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.add-copy p {
+  margin: 8px 0 0;
+  max-width: 26rem;
+  color: #3d3d3d;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.add-fields {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 18px;
+  min-width: 0;
 }
 
-.add-form .sheet-sub {
-  margin-top: 6px;
-}
-
-.add-pair {
-  display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  gap: 22px;
-}
-
-.add-form label {
+.add-fields label {
   gap: 8px;
   min-width: 0;
 }
 
-.add-form .lab {
+.add-fields .lab,
+.every .lab {
   font-weight: 700;
 }
 
-.add-form .hint,
-.add-form .form-error {
-  margin: 0;
+#view-add .add-fields input {
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
+  padding: 0 16px;
+  font-size: 1.05rem;
+  line-height: 50px;
 }
 
 .every {
@@ -38,7 +60,8 @@
   border: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  min-width: 0;
 }
 
 .every legend {
@@ -48,27 +71,45 @@
 .every-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
+}
+
+.region-grid,
+.notify-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .every-opt {
   position: relative;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  min-height: 44px;
+  gap: 2px;
+  min-height: 72px;
   margin: 0;
+  padding: 12px 14px;
   border: 1px solid #d7d7dc;
   border-radius: 8px;
   background: #fff;
   color: #141414;
-  font-size: 0.92rem;
-  font-weight: 600;
   cursor: pointer;
 }
 
-.every-opt span {
+.every-main,
+.every-sub {
   pointer-events: none;
+}
+
+.every-main {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.every-sub {
+  color: #3d3d3d;
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .every-opt input {
@@ -87,9 +128,73 @@
   color: #fff;
 }
 
+.every-opt:has(input:checked) .every-sub {
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .every-opt:has(input:focus-visible) {
   outline: 2px solid #0033a0;
   outline-offset: 2px;
+}
+
+.add-rules {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.add-rules .dot.slow {
+  background: #c2410c;
+}
+
+.add-rules .dot.down {
+  background: #9b1b1b;
+}
+
+.add-rules li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 72px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid #e6e6e8;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.add-rules li span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.add-rules strong {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.add-rules li span:last-child {
+  color: #3d3d3d;
+  font-size: 0.92rem;
+}
+
+.add-rules strong {
+  color: #141414;
+}
+
+#view-add .form-error {
+  margin: 0;
+  padding: 16px 32px 0;
+}
+
+#view-add .sheet-foot {
+  border-top: 0;
+  padding: 20px 32px;
 }
 
 .sheet-card a.btn-quiet {

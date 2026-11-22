@@ -113,12 +113,23 @@
     width: 44px;
   }
 
-  .add-pair {
+  .add-section {
     grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 22px 18px;
   }
 
-  .every-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .add-rules,
+  .every-grid,
+  .region-grid,
+  .notify-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #view-add .sheet-foot,
+  #view-add .form-error {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   #clear-ask:not([hidden]) {
