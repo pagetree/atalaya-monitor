@@ -67,5 +67,6 @@ $masked = preg_replace('/(^.).*(@.*$)/', '$1***$2', $pending['email']) ?? $pendi
       <p class="foot">Wrong account? <a href="./">Go back</a> and start again.</p>
     </section>
   </main>
+  <script src="assets/js/code.js"></script>
 </body>
 </html>
