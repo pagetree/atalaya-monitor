@@ -1,5 +1,5 @@
 import { INTERVALS, STATES, state } from './state.js';
-import { cleanInterval, cleanKind, cleanPeriod, cleanPort, cleanRegions, hostFrom, parseUrl } from './util.js';
+import { cleanInterval, cleanKind, cleanPeriod, cleanPort, cleanRegions, hostFrom, parseExclude, parseUrl } from './util.js';
 
 export function normalizeSamples(list) {
   if (!Array.isArray(list)) return [];
@@ -189,6 +189,11 @@ export function normalizeMonitor(m) {
   var kind = cleanKind(m.kind);
   var phrase = typeof m.phrase === 'string' ? m.phrase.trim().slice(0, 120) : '';
   if (kind !== 'keyword') phrase = '';
+  var exclude = [];
+  if (kind === 'website' || kind === 'api') {
+    var parsedExclude = parseExclude(Array.isArray(m.exclude) ? m.exclude.join(',') : '');
+    exclude = parsedExclude || [];
+  }
   var port = 0;
   if (kind === 'port') {
     port = cleanPort(m.port);
@@ -202,6 +207,7 @@ export function normalizeMonitor(m) {
     url: url,
     kind: kind,
     phrase: phrase,
+    exclude: exclude,
     port: port,
     interval: cleanInterval(Number(m.interval)),
     regions: cleanRegions(m.regions),

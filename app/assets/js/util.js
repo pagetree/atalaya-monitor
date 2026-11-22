@@ -58,6 +58,23 @@ export function cleanKind(value) {
   return 'website';
 }
 
+export function parseExclude(raw) {
+  var text = String(raw || '').trim();
+  if (!text) return [];
+  var parts = text.split(/[\s,]+/);
+  var out = [];
+  var i;
+  var n;
+  for (i = 0; i < parts.length; i += 1) {
+    if (!parts[i]) continue;
+    if (!/^\d{3}$/.test(parts[i])) return null;
+    n = Number(parts[i]);
+    if (n < 100 || n > 599) return null;
+    if (out.indexOf(n) === -1) out.push(n);
+  }
+  return out;
+}
+
 export function cleanPort(n) {
   n = Math.round(Number(n));
   if (!isFinite(n) || n < 1 || n > 65535) return 0;

@@ -112,6 +112,10 @@ async function probeHttp(job) {
 
   if (!response) return row(job, "down", null, Date.now() - started, "no response");
   const ms = Date.now() - started;
+  if ((kind === "website" || kind === "api") && codeExcluded(job, response.status)) {
+    await dropBody(response);
+    return row(job, "down", response.status, ms, "excluded");
+  }
   if (!response.ok) {
     await dropBody(response);
     return row(job, "down", response.status, ms, "");
@@ -143,6 +147,11 @@ async function dropBody(response) {
   if (response.body) {
     try { await response.body.cancel(); } catch { /* already consumed */ }
   }
+}
+
+function codeExcluded(job, status) {
+  const list = Array.isArray(job.exclude) ? job.exclude : [];
+  return list.some((code) => Number(code) === status);
 }
 
 function looksLikeApi(type) {

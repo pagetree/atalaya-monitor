@@ -1,5 +1,5 @@
 import { KEY, els, state } from './state.js';
-import { $, cleanInterval, cleanKind, cleanPeriod, cleanPort, hostFrom, parseUrl, portUrl, uid } from './util.js';
+import { $, cleanInterval, cleanKind, cleanPeriod, cleanPort, hostFrom, parseExclude, parseUrl, portUrl, uid } from './util.js';
 import { load, save, setBanner, setFormError } from './storage.js';
 import { render, renderRows } from './render.js';
 import { enqueue, findMonitor, tick } from './checks.js';
@@ -174,6 +174,15 @@ function onAdd(event) {
     if (form.phrase) form.phrase.focus();
     return;
   }
+  var exclude = [];
+  if (kind === 'website' || kind === 'api') {
+    exclude = parseExclude(form.exclude ? form.exclude.value : '');
+    if (exclude === null) {
+      setFormError('Enter status codes from 100 to 599, separated by commas.');
+      if (form.exclude) form.exclude.focus();
+      return;
+    }
+  }
   var name = form.name.value.trim().slice(0, 80);
   var interval = cleanInterval(Number(form.interval.value));
   state.monitors.push({
@@ -182,6 +191,7 @@ function onAdd(event) {
     url: url,
     kind: kind,
     phrase: kind === 'keyword' ? phrase : '',
+    exclude: exclude,
     port: kind === 'port' ? port : 0,
     interval: interval,
     regions: regions,
@@ -195,6 +205,7 @@ function onAdd(event) {
   form.name.value = '';
   form.url.value = '';
   if (form.phrase) form.phrase.value = '';
+  if (form.exclude) form.exclude.value = '';
   if (form.port) form.port.value = '';
   save();
   render();
@@ -279,9 +290,11 @@ export function init() {
     var kind = picked ? picked.value : 'website';
     var phrase = $('phrase-field');
     var port = $('port-field');
+    var exclude = $('exclude-field');
     var address = els.form.url;
     if (phrase) phrase.hidden = kind !== 'keyword';
     if (port) port.hidden = kind !== 'port';
+    if (exclude) exclude.hidden = kind !== 'website' && kind !== 'api';
     if (address) address.placeholder = kind === 'port' ? 'example.com' : 'https://';
   }
 

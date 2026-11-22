@@ -42,6 +42,10 @@
           </label>
         </div>
       </fieldset>
+      <label class="phrase-field" id="exclude-field">
+        <span class="lab">Excluded codes</span>
+        <input name="exclude" maxlength="80" inputmode="numeric" autocomplete="off" placeholder="404, 503" spellcheck="false">
+      </label>
       <label class="phrase-field" id="phrase-field" hidden>
         <span class="lab">Phrase</span>
         <input name="phrase" maxlength="120" autocomplete="off" placeholder="Words that must appear in the reply">
@@ -76,9 +80,9 @@
       <fieldset class="every" aria-label="Regions">
         <div class="region-grid">
           <label class="every-opt"><input type="checkbox" name="region" value="frankfurt" checked><span class="every-sub">Europe</span><span class="every-main">Frankfurt</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="capetown" checked><span class="every-sub">Africa</span><span class="every-main">Cape Town</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="singapore" checked><span class="every-sub">Asia</span><span class="every-main">Singapore</span></label>
-          <label class="every-opt"><input type="checkbox" name="region" value="sydney" checked><span class="every-sub">Oceania</span><span class="every-main">Sydney</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="capetown"><span class="every-sub">Africa</span><span class="every-main">Cape Town</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="singapore"><span class="every-sub">Asia</span><span class="every-main">Singapore</span></label>
+          <label class="every-opt"><input type="checkbox" name="region" value="sydney"><span class="every-sub">Oceania</span><span class="every-main">Sydney</span></label>
         </div>
       </fieldset>
     </section>

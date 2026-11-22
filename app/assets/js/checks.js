@@ -102,6 +102,17 @@ function looksLikeApi(type) {
   return false;
 }
 
+function isExcluded(monitor, status) {
+  var list = monitor.exclude;
+  var i;
+  if (!list || !list.length) return false;
+  if (monitor.kind !== 'website' && monitor.kind !== 'api') return false;
+  for (i = 0; i < list.length; i += 1) {
+    if (Number(list[i]) === status) return true;
+  }
+  return false;
+}
+
 function readBody(monitor, cors) {
   var response = cors.response;
   var base = {
@@ -110,6 +121,11 @@ function readBody(monitor, cors) {
     ms: cors.ms,
     note: ''
   };
+  if (isExcluded(monitor, response.status)) {
+    base.state = 'down';
+    base.note = 'excluded';
+    return base;
+  }
   if (!response.ok) return base;
   if (monitor.kind === 'api') {
     if (!looksLikeApi(response.headers.get('content-type'))) {
