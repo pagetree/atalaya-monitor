@@ -250,7 +250,7 @@ function syncView() {
   if (ledeEl) ledeEl.textContent = copy[1];
   document.title = copy[0] + ' · atalaya';
   var current = page === 'add' ? 'monitors' : page;
-  var links = document.querySelectorAll('.page-nav a');
+  var links = document.querySelectorAll('.page-nav > a');
   var i;
   for (i = 0; i < links.length; i += 1) {
     if (links[i].getAttribute('href') === '#' + current) links[i].setAttribute('aria-current', 'page');
