@@ -4,7 +4,6 @@ require __DIR__ . '/includes/guard.php';
 require __DIR__ . '/includes/avatar.php';
 
 [$appUser, $appProfile] = app_boot();
-$onAccount = true;
 
 $tabs = [
     'profile' => 'Profile',

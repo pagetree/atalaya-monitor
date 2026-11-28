@@ -1,7 +1,6 @@
 <?php
 
 $homeHref = 'index.php';
-$onAccount = !empty($onAccount);
 ?>
 <div class="dash-brand">
   <a class="brand" href="<?= htmlspecialchars($homeHref, ENT_QUOTES, 'UTF-8') ?>">
@@ -12,9 +11,4 @@ $onAccount = !empty($onAccount);
       </span>
     </span>
   </a>
-  <nav class="account-links" aria-label="Main">
-    <a href="index.php"<?= $onAccount ? '' : ' aria-current="page"' ?>>App</a>
-    <a href="settings.php"<?= $onAccount ? ' aria-current="page"' : '' ?>>Settings</a>
-    <a href="../auth/logout.php">Log out</a>
-  </nav>
 </div>
