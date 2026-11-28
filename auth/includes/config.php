@@ -72,6 +72,9 @@ function auth_config(): array
         'cf_from_email' => auth_env('CF_FROM_EMAIL', ''),
         'app_url' => rtrim(auth_env('APP_URL', ''), '/'),
         'session_name' => auth_env('AUTH_SESSION_NAME', 'atalaya_auth'),
+        'session_cookie' => auth_env('AUTH_SESSION_COOKIE', 'atalaya_sid'),
+        'session_idle_seconds' => 60 * 30,
+        'session_absolute_seconds' => 60 * 60 * 8,
         'code_ttl_minutes' => 30,
     ];
 
